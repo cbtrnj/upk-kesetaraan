@@ -1,27 +1,465 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ujian Pendidikan Kesetaraan (UPK) 2026</title>
-  <link rel="stylesheet" href="css/style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UPK Kesetaraan 2026</title>
+<title>PKBM RISTEK NUSANTARA JAYA</title>
+
+<style>
+body {
+    font-family: Arial;
+    margin:0;
+    background:#f4f6f8;
+    font-size:16px;
+}
+
+.header {
+    text-align:center;
+    padding:15px;
+    background:#0d6efd;
+    color:white;
+}
+
+.header img {
+    width:70px;
+    display:block;
+    margin:auto;
+}
+
+.container {
+    max-width: 500px;
+    width:95%;
+    margin: auto;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+button {
+    padding: 14px;
+    width: 100%;
+    margin-top: 10px;
+    border:none;
+    background:#0d6efd;
+    color:white;
+    border-radius:8px;
+    font-size:16px;
+}
+
+.nav-btn {
+    display:flex;
+    gap:10px;
+}
+
+input[type="text"] {
+    width:100%;
+    padding:10px;
+    margin-bottom:10px;
+}
+
+.progress {
+    background:#ddd;
+    border-radius:10px;
+    overflow:hidden;
+    margin-bottom:10px;
+}
+
+.progress-bar {
+    height:10px;
+    background:#198754;
+    width:0%;
+}
+
+.footer {
+    text-align:center;
+    font-size:13px;
+    color:#666;
+    margin-top:20px;
+    padding:10px;
+}
+</style>
 </head>
+
 <body>
 
-  <div class="container">
-    <h2>Soal Ujian</h2>
+<div class="header">
+    <img src="https://i.imgur.com/J1mKppg.png">
+    <h3>UJIAN PENDIDIKAN KESETARAAN (UPK)</h3>
+    <p>PKBM Ristek Nusantara Jaya</p>
+</div>
 
-    <p id="timer">Waktu: 90:00</p>
+<div class="container">
 
-    <div class="soal">
-      <p>1. 2 + 2 = ?</p>
-      <button>4</button>
-      <button>5</button>
-      <button>6</button>
+<!-- LOGIN -->
+<div id="login">
+    <h3>Ujian Bahasa Indonesia</h3>
+    <input type="text" id="nama" placeholder="Masukkan Nama">
+    <button onclick="mulai()">Mulai Ujian</button>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" style="display:none;">
+
+    <!-- TIMER -->
+    <div style="text-align:center; font-weight:bold;">
+         Waktu: <span id="timer">90:00</span>
     </div>
 
-  </div>
+    <div class="progress">
+        <div class="progress-bar" id="bar"></div>
+    </div>
 
-  <script src="js/script.js"></script>
+    <div id="soal"></div>
+
+    <div class="nav-btn">
+        <button onclick="prev()">Kembali</button>
+        <button onclick="next()">Next</button>
+    </div>
+
+</div>
+
+<div class="footer">
+    <div><strong>Hak Cipta : PKBM Ristek Nusantara Jaya</strong></div>
+    <div>@ganosec19</div>
+</div>
+
+</div>
+
+<script>
+let soalData = [
+
+/* ===== ISIAN ===== */
+{tipe:"isian", t:"Dalam menulis surat lamaran pekerjaan, penggunaan bahasa yang _____________ sangat diperlukan agar profesional.", a:"baku"},
+{tipe:"isian", t:"Kata  implementasi  berarti _____________.", a:"pelaksanaan"},
+{tipe:"isian", t:"Teks eksplanasi bertujuan untuk _____________ suatu fenomena.", a:"menjelaskan"},
+{tipe:"isian", t:"Sinonim abstrak adalah _____________.", a:"ringkas"},
+{tipe:"isian", t:"Paragraf argumentasi mengandung _____________ pendukung.", a:"data"},
+
+/* ===== PILIHAN GANDA ===== */
+{
+  tipe:"pg",
+  bacaan:"Teknologi digital telah mengubah cara manusia berkomunikasi dan belajar. Namun, penggunaannya harus bijak.",
+  t:"Jenis paragraf tersebut adalah...",
+  o:["Narasi","Deskripsi","Argumentasi","Persuasi"],
+  a:2
+},
+
+{tipe:"pg", t:"Ciri teks prosedur adalah...", o:[
+"Langkah berurutan","Ada tokoh","Bersifat cerita","Mengandung konflik"], a:0},
+
+{tipe:"pg", t:"Fungsi pembuka pidato adalah...", o:[
+"Menyimpulkan","Menyapa","Menyanggah","Menjelaskan"], a:1},
+
+{tipe:"pg", t:"Makna implisit: sekolah bersih tergantung siswa artinya...", o:[
+"Siswa peduli","Tidak penting","Guru saja","Sekolah kotor"], a:0},
+
+{tipe:"pg", t:"Arti transparan adalah...", o:[
+"Jelas","Tertutup","Sulit","Rahasia"], a:0},
+
+{tipe:"pg", t:"Kata 'berhasil' termasuk...", o:[
+"Kata benda","Kata kerja","Kata sifat","Kata depan"], a:1},
+
+{tipe:"pg", t:"Kendaraan listrik berfungsi untuk...", o:[
+"Menambah polusi","Mengurangi polusi","Tidak berguna","Berbahaya"], a:1},
+
+{tipe:"pg", t:"Dalam debat harus ada...", o:[
+"Emosi","Bukti","Marah","Diam"], a:1},
+
+{tipe:"pg", t:"Kalimat efektif adalah...", o:[
+"Karena hujan sehingga banjir",
+"Banjir karena hujan deras",
+"Hujan deras sehingga karena banjir",
+"Banjir hujan karena deras"], a:1},
+
+{tipe:"pg", t:"Sinonim konklusi...", o:[
+"Penjelasan","Kesimpulan","Penolakan","Cerita"], a:1},
+
+{tipe:"pg", t:"Struktur teks eksposisi terdiri dari...", o:[
+"Tesis, argumen, penegasan ulang",
+"Orientasi, komplikasi, resolusi",
+"Judul, isi, penutup",
+"Pembuka, isi, penutup"], a:0},
+
+{tipe:"pg", t:"Tujuan teks persuasi adalah...", o:[
+"Menginformasikan",
+"Menceritakan",
+"Membujuk pembaca",
+"Menggambarkan"], a:2},
+
+{tipe:"pg", t:"Kalimat utama biasanya terletak di...", o:[
+"Awal paragraf",
+"Tengah paragraf",
+"Akhir paragraf",
+"Semua benar"], a:3},
+
+{tipe:"pg", t:"Kata baku dari 'resiko' adalah...", o:[
+"Resiko","Risiko","Resikoe","Resikho"], a:1},
+
+{tipe:"pg", t:"Antonim kata 'efektif' adalah...", o:[
+"Berhasil","Gagal","Tidak efektif","Cepat"], a:2},
+
+{tipe:"pg", t:"Teks laporan hasil observasi bersifat...", o:[
+"Subjektif","Fiksi","Objektif","Imajinatif"], a:2},
+
+{tipe:"pg", t:"Fungsi kata hubung adalah...", o:[
+"Menyambung kata",
+"Menyambung kalimat",
+"Menyambung paragraf",
+"Semua benar"], a:3},
+
+{tipe:"pg", t:"Contoh kata kerja aktif adalah...", o:[
+"Dimakan","Dibaca","Menulis","Terbaca"], a:2},
+
+{tipe:"pg", t:"Kalimat yang tidak efektif adalah...", o:[
+"Saya pergi ke sekolah",
+"Saya pergi ke sekolah setiap hari",
+"Pergi saya ke sekolah",
+"Saya selalu pergi ke sekolah"], a:2},
+
+{tipe:"pg", t:"Teks deskripsi bertujuan untuk...", o:[
+"Menggambarkan objek",
+"Menceritakan",
+"Membujuk",
+"Menyimpulkan"], a:0},
+
+{tipe:"pg", t:"Makna denotatif adalah...", o:[
+"Makna kias",
+"Makna sebenarnya",
+"Makna tambahan",
+"Makna simbol"], a:1},
+
+{tipe:"pg", t:"Kalimat perintah disebut juga...", o:[
+"Imperatif","Deklaratif","Interogatif","Eksklamatif"], a:0},
+
+{tipe:"pg", t:"Ciri teks narasi adalah...", o:[
+"Ada alur cerita",
+"Ada langkah-langkah",
+"Ada data",
+"Ada ajakan"], a:0},
+
+{tipe:"pg", t:"Kata 'cepat' termasuk...", o:[
+"Kata benda","Kata sifat","Kata kerja","Kata hubung"], a:1},
+
+{tipe:"pg", t:"Sinonim kata 'pandai' adalah...", o:[
+"Bodoh","Cerdas","Malas","Lemah"], a:1},
+
+{
+  tipe:"pg",
+  bacaan:"Lingkungan yang bersih akan menciptakan suasana yang nyaman dan sehat. Oleh karena itu, setiap individu harus menjaga kebersihan.",
+  t:"Ide pokok paragraf tersebut adalah...",
+  o:[
+    "Lingkungan kotor berbahaya",
+    "Kebersihan menciptakan kenyamanan",
+    "Orang tidak peduli lingkungan",
+    "Lingkungan tidak penting"
+  ],
+  a:1
+},
+
+{tipe:"pg", t:"Kalimat tanya digunakan untuk...", o:[
+"Menyatakan","Bertanya","Memerintah","Melarang"], a:1},
+
+{tipe:"pg", t:"Kata hubung 'karena' menyatakan...", o:[
+"Akibat","Sebab","Tujuan","Pilihan"], a:1},
+
+{tipe:"pg", t:"Lawan kata 'besar' adalah...", o:[
+"Tinggi","Kecil","Panjang","Lebar"], a:1},
+
+{tipe:"pg", t:"Kalimat berikut yang benar adalah...", o:[
+"Saya sedang makan nasi",
+"Saya makan sedang nasi",
+"Makan saya sedang nasi",
+"Nasi makan saya sedang"], a:0},
+
+{tipe:"pg", t:"Teks berita harus bersifat...", o:[
+"Fiksi","Subjektif","Objektif","Imajinatif"], a:2},
+
+{tipe:"pg", t:"Kata 'indah' termasuk...", o:[
+"Kata kerja","Kata sifat","Kata benda","Kata hubung"], a:1},
+
+{tipe:"pg", t:"Tujuan teks laporan adalah...", o:[
+"Menceritakan","Melaporkan fakta","Membujuk","Menghibur"], a:1},
+
+{tipe:"pg", t:"Kalimat ajakan biasanya ditandai dengan kata...", o:[
+"Ayo","Karena","Jika","Maka"], a:0},
+
+{tipe:"pg", t:"Kata 'berlari' termasuk...", o:[
+"Kata benda","Kata kerja","Kata sifat","Kata depan"], a:1},
+
+{tipe:"pg", t:"Makna kata 'hemat' adalah...", o:[
+"Boros","Irit","Cepat","Lambat"], a:1},
+
+{tipe:"pg", t:"Kalimat larangan biasanya menggunakan kata...", o:[
+"Ayo","Jangan","Mari","Silakan"], a:1},
+
+{tipe:"pg", t:"Ciri teks eksplanasi adalah...", o:[
+"Ada cerita","Menjelaskan proses","Menghibur","Mengajak"], a:1},
+
+{tipe:"pg", t:"Kata 'rumah' termasuk...", o:[
+"Kata kerja","Kata sifat","Kata benda","Kata hubung"], a:2},
+
+{tipe:"pg", t:"Kalimat berikut yang termasuk perintah adalah...", o:[
+"Saya makan nasi",
+"Tolong ambilkan buku itu",
+"Buku itu bagus",
+"Saya membaca buku"], a:1}
+
+];
+
+
+// ================= STATE =================
+let index = 0;
+let jawaban = [];
+
+// ================= LOAD DATA (ANTI REFRESH) =================
+let simpanJawaban = localStorage.getItem("jawaban");
+let simpanIndex = localStorage.getItem("index");
+
+if(simpanJawaban){
+    jawaban = JSON.parse(simpanJawaban);
+}
+
+if(simpanIndex){
+    index = parseInt(simpanIndex);
+}
+
+// ================= TIMER =================
+let waktu = 90 * 60; // 90 menit
+let intervalTimer;
+
+function startTimer(){
+    intervalTimer = setInterval(() => {
+        let menit = Math.floor(waktu / 60);
+        let detik = waktu % 60;
+
+        document.getElementById("timer").innerText =
+            `${menit}:${detik < 10 ? "0"+detik : detik}`;
+
+        waktu--;
+
+        if(waktu < 0){
+            clearInterval(intervalTimer);
+            alert("Waktu habis!");
+            kirim();
+        }
+    }, 1000);
+}
+
+// ================= MULAI =================
+function mulai(){
+    let nama = document.getElementById("nama").value;
+
+    if(nama.trim()==""){
+        alert("Isi nama dulu!");
+        return;
+    }
+
+    document.getElementById("login").style.display="none";
+    document.getElementById("quiz").style.display="block";
+
+    startTimer();
+    tampil();
+}
+
+// ================= TAMPIL SOAL =================
+function tampil(){
+    let s = soalData[index];
+    let html = "";
+
+    if(s.bacaan){
+        html += `<p><i>${s.bacaan}</i></p>`;
+    }
+
+    html += `<p><b>${index+1}. ${s.t}</b></p>`;
+
+    if(s.tipe=="pg"){
+        s.o.forEach((opt,i)=>{
+            let checked = jawaban[index]==i ? "checked":"";
+            html += `<label>
+                <input type="radio" name="pilih" value="${i}" ${checked}>
+                ${opt}
+            </label><br>`;
+        });
+    }
+
+    if(s.tipe=="isian"){
+        let isi = jawaban[index] || "";
+        html += `<input type="text" id="isian" value="${isi}">`;
+    }
+
+    document.getElementById("soal").innerHTML = html;
+
+    // progress bar
+    let persen = (index/soalData.length)*100;
+    document.getElementById("bar").style.width = persen+"%";
+}
+
+// ================= NEXT =================
+function next(){
+    let s = soalData[index];
+
+    if(s.tipe=="pg"){
+        let pilih = document.querySelector('input[name="pilih"]:checked');
+        if(!pilih){ alert("Pilih jawaban!"); return; }
+        jawaban[index] = parseInt(pilih.value);
+    }
+
+    if(s.tipe=="isian"){
+        let isi = document.getElementById("isian").value;
+        if(isi.trim()==""){ alert("Isi jawaban!"); return; }
+        jawaban[index] = isi;
+    }
+
+    // simpan
+    localStorage.setItem("jawaban", JSON.stringify(jawaban));
+
+    index++;
+    localStorage.setItem("index", index);
+
+    if(index < soalData.length){
+        tampil();
+    } else {
+        kirim();
+    }
+}
+
+// ================= PREV =================
+function prev(){
+    if(index>0){
+        index--;
+        localStorage.setItem("index", index);
+        tampil();
+    }
+}
+
+// ================= KIRIM =================
+function kirim(){
+    let skor = 0;
+
+    soalData.forEach((s,i)=>{
+        if(s.tipe=="pg" && s.a === jawaban[i]){
+            skor++;
+        }
+    });
+
+    fetch("https://script.google.com/macros/s/AKfycbzm1SEbNBA9Q6j_-hqvHdWbMuoLxPhyrPlWRpzSZzkeicPflKSk46hqy96kr7GBg11j3A/exec", {
+        method:"POST",
+        body:JSON.stringify({
+            nama: document.getElementById("nama").value,
+            skor: skor,
+            jawaban: jawaban.join("|")
+        })
+    });
+
+    // hapus storage
+    localStorage.removeItem("jawaban");
+    localStorage.removeItem("index");
+
+    document.body.innerHTML =
+    "<h2 style='text-align:center;'>Jawaban berhasil dikirim</h2>";
+}
+
+</script>
 </body>
 </html>
