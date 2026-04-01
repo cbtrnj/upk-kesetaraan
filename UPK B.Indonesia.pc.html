@@ -431,10 +431,8 @@
   </li>
   
     </ol>
-    <button id="btnBackPG" type="button">Kembali</button>
-  <!-- Tombol lanjut ke Uraian -->
-  <button id="btnNextPG" type="button">Berikutnya</button>
-</div>
+   <button type="button" onclick="nextSection('sectionPG','sectionIsian')">Kembali</button>
+<button type="button" onclick="nextSection('sectionPG','sectionUraian')">Berikutnya</button>
 
   <!-- Section Uraian -->
   <div class="content hidden section" id="sectionUraian">
@@ -447,9 +445,9 @@
       <li>Jelaskan langkah-langkah utama dalam menulis teks pidato yang efektif dan menarik!<br><textarea id="uraian5"></textarea></li>
     </ol>
     <!-- Tombol kembali ke PG -->
-  <button id="btnBackUraian" type="button">Kembali</button>
-  <!-- Tombol kirim jawaban -->
-  <button id="btnSubmit" type="button" onclick="submitUjian()">Kirim Jawaban</button>
+  <button type="button" onclick="nextSection('sectionUraian','sectionPG')">Kembali</button>
+<!-- Tombol kirim jawaban -->
+<button type="button" onclick="submitUjian()">Kirim Jawaban</button>
 </div>
 
  <!-- Script Final -->
