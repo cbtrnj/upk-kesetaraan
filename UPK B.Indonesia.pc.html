@@ -441,16 +441,16 @@
         isian4:"ringkas",
         isian5:"data"
       },
-       pg: {
-      pg1:"C", pg2:"A", pg3:"B", pg4:"B", pg5:"A",
-      pg6:"C", pg7:"C", pg8:"B", pg9:"B", pg10:"B",
-      pg11:"A", pg12:"D", pg13:"A", pg14:"D", pg15:"C",
-      pg16:"B", pg17:"B", pg18:"B", pg19:"D", pg20:"B",
-      pg21:"B", pg22:"B", pg23:"B", pg24:"C", pg25:"A",
-      pg26:"C", pg27:"A", pg28:"B", pg29:"A", pg30:"B",
-      pg31:"C", pg32:"A", pg33:"A", pg34:"B", pg35:"C",
-      pg36:"C", pg37:"B", pg38:"A", pg39:"A", pg40:"B",
-      pg41:"B", pg42:"C", pg43:"B", pg44:"B", pg45:"B"
+      pg: {
+        pg1:"C", pg2:"A", pg3:"B", pg4:"B", pg5:"A",
+        pg6:"C", pg7:"C", pg8:"B", pg9:"B", pg10:"B",
+        pg11:"A", pg12:"D", pg13:"A", pg14:"D", pg15:"C",
+        pg16:"B", pg17:"B", pg18:"B", pg19:"D", pg20:"B",
+        pg21:"B", pg22:"B", pg23:"B", pg24:"C", pg25:"A",
+        pg26:"C", pg27:"A", pg28:"B", pg29:"A", pg30:"B",
+        pg31:"C", pg32:"A", pg33:"A", pg34:"B", pg35:"C",
+        pg36:"C", pg37:"B", pg38:"A", pg39:"A", pg40:"B",
+        pg41:"B", pg42:"C", pg43:"B", pg44:"B", pg45:"B"
       }
     }
   };
@@ -481,33 +481,26 @@
     }
     document.getElementById("intro").classList.add("hidden");
     document.getElementById("sectionIsian").classList.remove("hidden");
-    document.getElementById("boxIsian").classList.add("active");
-    document.getElementById("infoBar").classList.remove("hidden");
-    mulaiTimer(); // aktifkan timer saat ujian dimulai
+    document.getElementById("infoBar").style.display = "block";
+    mulaiTimer();
   }
 
   function nextSection(current,next){
     document.getElementById(current).classList.add("hidden");
     document.getElementById(next).classList.remove("hidden");
-    if(next==="sectionPG"){
-      document.getElementById("boxPG").classList.add("active");
-      document.getElementById("boxIsian").classList.remove("active");
-    }
-    if(next==="sectionUraian"){
-      document.getElementById("boxUraian").classList.add("active");
-      document.getElementById("boxPG").classList.remove("active");
-    }
   }
 
   function submitUjian(){
-    clearInterval(timerInterval); // hentikan timer
+    clearInterval(timerInterval);
+    const btn = document.getElementById("btnSubmit");
+    btn.disabled = true;
 
     const nama = document.getElementById("nama").value.trim();
-    const idMapel = "Bahasa Indonesia Paket C"; // nama mapel jelas
+    const idMapel = "Bahasa Indonesia Paket C";
     const kunciIsian = kunciJawaban["bindo"].isian;
     const kunciPG = kunciJawaban["bindo"].pg;
 
-    // Hitung skor isian
+    // Skor isian
     let skorIsian = 0;
     let isian = [];
     for(let i=1;i<=5;i++){
@@ -516,7 +509,7 @@
       if(jawaban === kunciIsian["isian"+i]) skorIsian++;
     }
 
-    // Hitung skor PG
+    // Skor PG
     let skorPG = 0;
     let pg = [];
     for(let i=1;i<=45;i++){
@@ -526,7 +519,7 @@
       if(val === kunciPG["pg"+i]) skorPG++;
     }
 
-    // Ambil uraian
+    // Uraian
     let uraian = [];
     for(let i=1;i<=5;i++){
       uraian.push(document.getElementById("uraian"+i).value);
@@ -534,7 +527,6 @@
 
     let nilai = ((skorIsian + skorPG) / 50) * 100;
 
-    // Kirim ke Google Sheet
     fetch(URL, {
       method: "POST",
       body: JSON.stringify({
@@ -550,18 +542,28 @@
     })
     .then(res => res.text())
     .then(res => {
-      alert(
-        "Jawaban berhasil dikirim!\n" +
-        "Nama: " + nama +
-        "\nMapel: " + idMapel +
-        "\nSkor Isian: " + skorIsian + " / 5" +
-        "\nSkor PG: " + skorPG + " / 45" +
-        "\nNilai: " + nilai.toFixed(2) +
-        "\nJawaban uraian tersimpan untuk penilaian manual."
-      );
+      // Tutup tampilan ujian
+      document.getElementById("sectionUraian").classList.add("hidden");
+      document.getElementById("infoBar").style.display = "none";
+
+      // Pesan akhir rapi
+      const endMsg = document.createElement("div");
+      endMsg.innerHTML = `
+        <div style="background:#007bff;color:#fff;padding:30px;text-align:center;
+                    margin:50px auto;max-width:600px;border-radius:10px;">
+          <h2>Terima kasih!</h2>
+          <p>Jawaban Anda sudah terkirim.</p>
+          <p>Nama: ${nama}</p>
+          <p>Mapel: ${idMapel}</p>
+          <p>Nilai: ${nilai.toFixed(2)}</p>
+          <p>Jawaban uraian tersimpan untuk penilaian manual.</p>
+        </div>
+      `;
+      document.body.appendChild(endMsg);
     })
     .catch(err => {
       alert("Gagal kirim ke server: " + err);
+      btn.disabled = false;
     });
   }
 </script>
