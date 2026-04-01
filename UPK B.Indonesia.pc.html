@@ -433,7 +433,7 @@
     </ol>
    <button type="button" onclick="nextSection('sectionPG','sectionIsian')">Kembali</button>
 <button type="button" onclick="nextSection('sectionPG','sectionUraian')">Berikutnya</button>
-
+</div>
   <!-- Section Uraian -->
   <div class="content hidden section" id="sectionUraian">
     <h3>Soal Uraian</h3>
@@ -447,7 +447,7 @@
     <!-- Tombol kembali ke PG -->
   <button type="button" onclick="nextSection('sectionUraian','sectionPG')">Kembali</button>
 <!-- Tombol kirim jawaban -->
-<button type="button" onclick="submitUjian()">Kirim Jawaban</button>
+<button id="btnSubmit" type="button" onclick="submitUjian()">Kirim Jawaban</button>
 </div>
 
  <!-- Script Final -->
@@ -496,7 +496,7 @@
 
   function mulaiUjian(){
     const nama = document.getElementById("nama").value.trim();
-    if(nama===""){
+    if(!nama){
       alert("Silakan isi nama terlebih dahulu.");
       return;
     }
@@ -586,20 +586,6 @@
       alert("Gagal kirim ke server: " + err);
       btn.disabled = false;
     });
-  }
-
-  document.addEventListener("DOMContentLoaded", function(){
-    document.getElementById("btnNextIsian")
-      .addEventListener("click", ()=> nextSection("sectionIsian","sectionPG"));
-
-    document.getElementById("btnBackPG")
-      .addEventListener("click", ()=> nextSection("sectionPG","sectionIsian"));
-
-    document.getElementById("btnNextPG")
-      .addEventListener("click", ()=> nextSection("sectionPG","sectionUraian"));
-
-    document.getElementById("btnBackUraian")
-      .addEventListener("click", ()=> nextSection("sectionUraian","sectionPG"));
   }
 
 </script>
