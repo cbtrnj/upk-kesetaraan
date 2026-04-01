@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UPK Kesetaraan 2026</title>
+<title>PKBM RISTEK NUSANTARA JAYA</title>
+
+<style>
+body {
+    font-family: Arial;
+    margin:0;
+    background:#f4f6f8;
+    font-size:16px;
+}
+
+.header {
+    text-align:center;
+    padding:15px;
+    background:#0d6efd;
+    color:white;
+}
+
+.header img {
+    width:70px;
+    display:block;
+    margin:auto;
+}
+
+.container {
+    max-width: 500px;
+    width:95%;
+    margin: auto;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+button {
+    padding: 14px;
+    width: 100%;
+    margin-top: 10px;
+    border:none;
+    background:#0d6efd;
+    color:white;
+    border-radius:8px;
+    font-size:16px;
+}
+
+.nav-btn {
+    display:flex;
+    gap:10px;
+}
+
+input[type="text"] {
+    width:100%;
+    padding:10px;
+    margin-bottom:10px;
+}
+
+.progress {
+    background:#ddd;
+    border-radius:10px;
+    overflow:hidden;
+    margin-bottom:10px;
+}
+
+.progress-bar {
+    height:10px;
+    background:#198754;
+    width:0%;
+}
+
+.footer {
+    text-align:center;
+    font-size:13px;
+    color:#666;
+    margin-top:20px;
+    padding:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <img src="https://i.imgur.com/J1mKppg.png">
+    <h3>UJIAN PENDIDIKAN KESETARAAN (UPK)</h3>
+    <p>PKBM Ristek Nusantara Jaya</p>
+</div>
+
+<div class="container">
+
+<!-- LOGIN -->
+<div id="login">
+    <h3>Ujian Bahasa Indonesia</h3>
+    <input type="text" id="nama" placeholder="Masukkan Nama">
+    <button onclick="mulai()">Mulai Ujian</button>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" style="display:none;">
+
+    <!-- TIMER -->
+    <div style="text-align:center; font-weight:bold;">
+        ⏳ Waktu: <span id="timer">90:00</span>
+    </div>
+
+    <div class="progress">
+        <div class="progress-bar" id="bar"></div>
+    </div>
+
+    <div id="soal"></div>
+
+    <div class="nav-btn">
+        <button onclick="prev()">⬅️ Kembali</button>
+        <button onclick="next()">Next ➡️</button>
+    </div>
+
+</div>
+
+<div class="footer">
+    <div><strong>Hak Cipta : PKBM Ristek Nusantara Jaya</strong></div>
+    <div>@ganosec19</div>
+</div>
+
+</div>
+
+<script>
+// ================= DATA SOAL =================
+let soalData = [
+  // ISIAN SINGKAT
+  { tipe:"isian", q:"Nilai utama yang terkandung dalam sila keempat Pancasila adalah _____________ dalam pengambilan keputusan bersama." },
+  { tipe:"isian", q:"Warga negara memiliki hak dan kewajiban untuk _____________ dalam pemilihan umum." },
+  { tipe:"isian", q:"Salah satu bentuk pelaksanaan supremasi hukum di Indonesia adalah adanya _____________ dalam menyelesaikan sengketa konstitusi." },
+  { tipe:"isian", q:"Prinsip checks and balances dalam sistem pemerintahan bertujuan untuk mencegah terjadinya _____________ kekuasaan." },
+  { tipe:"isian", q:"Perwujudan sikap toleransi terhadap keberagaman suku dan agama merupakan bagian dari pengamalan sila _____________ Pancasila." },
+
+  // PILIHAN GANDA (40 soal dari dokumen)
+  { tipe:"pg", q:"Nilai-nilai yang terkandung dalam Pancasila bersifat:", o:["Individualistis","Universal","Sekuler","Kapitalis"], a:1 },
+  { tipe:"pg", q:"Undang-Undang Dasar Negara Republik Indonesia Tahun 1945 merupakan:", o:["Undang-undang biasa","Peraturan pemerintah","Hukum dasar tertulis","Keputusan presiden"], a:2 },
+  { tipe:"pg", q:"Lembaga negara yang memiliki wewenang menguji undang-undang terhadap UUD 1945 adalah:", o:["Dewan Perwakilan Rakyat","Mahkamah Konstitusi","Presiden","Komisi Yudisial"], a:1 },
+  { tipe:"pg", q:"Hak asasi manusia yang dijamin dalam UUD 1945 mencakup, kecuali:", o:["Hak hidup","Hak kepemilikan pribadi","Hak monopoli atas sumber daya alam","Hak berpendapat"], a:2 },
+  { tipe:"pg", q:"Prinsip demokrasi yang diterapkan di Indonesia adalah:", o:["Demokrasi liberal","Demokrasi terpimpin","Demokrasi pancasila","Demokrasi totaliter"], a:2 },
+  { tipe:"pg", q:"Berikut ini yang bukan merupakan ciri negara hukum adalah:", o:["Adanya perlindungan HAM","Pemerintah berdasarkan kekuasaan mutlak","Kekuasaan kehakiman yang bebas","Supremasi hukum"], a:1 },
+  { tipe:"pg", q:"Dalam sistem pemerintahan presidensial, presiden berperan sebagai:", o:["Kepala negara dan kepala pemerintahan","Hanya kepala negara","Hanya kepala pemerintahan","Ketua Mahkamah Agung"], a:0 },
+  { tipe:"pg", q:"Salah satu kewajiban warga negara menurut UUD 1945 adalah:", o:["Mendapatkan pendidikan","Membayar pajak","Memilih presiden","Mendapatkan pekerjaan"], a:1 },
+  { tipe:"pg", q:"Contoh perilaku yang mencerminkan sikap toleransi adalah:", o:["Memaksakan kehendak","Menghargai perbedaan pendapat","Menyebarkan berita hoaks","Mendiskriminasi kelompok minoritas"], a:1 },
+  { tipe:"pg", q:"Penegakan hukum di Indonesia sering terhambat oleh:", o:["Transparansi","Korupsi","Partisipasi publik","Supremasi hukum"], a:1 },
+  { tipe:"pg", q:"Salah satu tantangan demokrasi di era digital adalah:", o:["Kurangnya sumber daya manusia","Penyebaran disinformasi","Keterbatasan teknologi","Tingginya partisipasi pemilih"], a:1 },
+  { tipe:"pg", q:"Fungsi utama DPR adalah:", o:["Mengawasi presiden","Membentuk undang-undang","Melantik presiden","Mengadili pelanggaran HAM"], a:1 },
+  { tipe:"pg", q:"Pelanggaran hak asasi manusia dapat diadukan ke:", o:["Kementerian Pendidikan","Komnas HAM","Mahkamah Agung","KPU"], a:1 },
+  { tipe:"pg", q:"Salah satu bentuk ancaman terhadap integrasi nasional adalah:", o:["Persatuan bangsa","Konflik horizontal","Kerja sama antar daerah","Toleransi"], a:1 },
+  { tipe:"pg", q:"Hak berorganisasi diatur dalam:", o:["Pasal 28 UUD 1945","Pasal 31 UUD 1945","Pasal 33 UUD 1945","Pasal 37 UUD 1945"], a:0 },
+  { tipe:"pg", q:"Semboyan Bhinneka Tunggal Ika mencerminkan:", o:["Persatuan dalam perbedaan","Keseragaman budaya","Ketidakadilan sosial","Ketidaksetaraan gender"], a:0 },
+  { tipe:"pg", q:"Lembaga yang mengawasi pelaksanaan pemilu adalah:", o:["KPU","Bawaslu","DPR","Mahkamah Agung"], a:1 },
+  { tipe:"pg", q:"Salah satu bentuk partisipasi aktif warga negara adalah:", o:["Tidak memilih dalam pemilu","Terlibat dalam kegiatan sosial","Mengabaikan aturan lalu lintas","Membayar pungutan liar"], a:1 },
+  { tipe:"pg", q:"Prinsip persamaan di hadapan hukum berarti:", o:["Hukum hanya berlaku untuk pejabat","Semua orang sama di mata hukum","Hukum mudah diubah","Hukum tidak mengikat"], a:1 },
+  { tipe:"pg", q:"Salah satu dampak globalisasi terhadap identitas nasional adalah:", o:["Penguatan budaya lokal","Hilangnya budaya asli","Pemantapan nilai-nilai nasional","Meningkatnya nasionalisme"], a:1 },
+  { tipe:"pg", q:"Upaya menjaga kelestarian lingkungan merupakan bagian dari:", o:["Hak pribadi","Kewajiban sebagai warga negara","Tanggung jawab pemerintah saja","Hak asasi manusia"], a:1 },
+  { tipe:"pg", q:"Kewenangan Mahkamah Agung adalah:", o:["Mengadili sengketa hasil pemilu","Menguji undang-undang terhadap UUD","Mengadili kasasi perkara perdata dan pidana","Melantik presiden"], a:2 },
+  { tipe:"pg", q:"Salah satu tujuan otonomi daerah adalah:", o:["Memperkuat sentralisasi kekuasaan","Meningkatkan partisipasi masyarakat","Mengurangi peran DPRD","Menambah beban pemerintah pusat"], a:1 },
+  { tipe:"pg", q:"Penyalahgunaan kekuasaan oleh pejabat publik disebut juga:", o:["Demokrasi","Korupsi","Reformasi","Desentralisasi"], a:1 },
+  { tipe:"pg", q:"Contoh pengamalan nilai keadilan sosial adalah:", o:["Membeda-bedakan teman","Membantu korban bencana","Menolak membantu orang miskin","Mengabaikan hak orang lain"], a:1 },
+  { tipe:"pg", q:"Lembaga yang berfungsi sebagai pengawas eksternal pemerintah adalah:", o:["BPK","KPK","Polri","BIN"], a:0 },
+  { tipe:"pg", q:"Prinsip supremasi hukum berarti:", o:["Semua warga negara harus taat hukum","Hukum dibuat untuk pejabat saja","Hukum bersifat diskriminatif","Hukum bisa diabaikan"], a:0 },
+  { tipe:"pg", q:"Hak menyatakan pendapat secara bebas diatur dalam:", o:["Pasal 27 UUD 1945","Pasal 28E UUD 1945","Pasal 29 UUD 1945","Pasal 31 UUD 1945"], a:1 },
+  { tipe:"pg", q:"Salah satu bentuk perilaku anti korupsi adalah:", o:["Memberikan suap","Melaporkan tindak pidana korupsi","Menyembunyikan kejahatan","Membiarkan penyalahgunaan wewenang"], a:1 },
+  { tipe:"pg", q:"Kebebasan pers di Indonesia dijamin oleh:", o:["UUD 1945 Pasal 28F","UUD 1945 Pasal 33","UUD 1945 Pasal 36C","UUD 1945 Pasal 37"], a:0 },
+  { tipe:"pg", q:"Salah satu hak warga negara dalam bidang pendidikan adalah:", o:["Hak memperoleh pendidikan","Hak membatasi pendidikan","Hak memberhentikan guru","Hak membatasi akses informasi"], a:0 },
+  { tipe:"pg", q:"Peran aktif dalam menjaga persatuan bangsa dapat diwujudkan dengan:", o:["Menghargai perbedaan budaya","Saling mencela","Menghasut permusuhan","Mengabaikan aturan"], a:0 },
+    { tipe:"pg", q:"Kebijakan publik yang baik harus:", o:["Menguntungkan kelompok tertentu saja","Berdasarkan aspirasi masyarakat","Berlaku diskriminatif","Mengabaikan kepentingan rakyat"], a:1 },
+  { tipe:"pg", q:"Salah satu tantangan dalam penegakan HAM di Indonesia adalah:", o:["Lemahnya penegakan hukum","Banyaknya lembaga HAM","Terbatasnya jumlah penduduk","Rendahnya partisipasi masyarakat"], a:0 },
+  { tipe:"pg", q:"Hak memperoleh pekerjaan dan penghidupan yang layak dijamin dalam:", o:["Pasal 27 ayat 2 UUD 1945","Pasal 29 UUD 1945","Pasal 31 UUD 1945","Pasal 33 UUD 1945"], a:0 },
+  { tipe:"pg", q:"Tugas utama Komisi Yudisial adalah:", o:["Mengangkat hakim agung","Mengawasi perilaku hakim","Mengadili perkara pidana","Membentuk undang-undang"], a:1 },
+  { tipe:"pg", q:"Salah satu contoh pelanggaran HAM berat adalah:", o:["Pencurian","Pembunuhan massal","Penipuan","Perusakan fasilitas umum"], a:1 },
+  { tipe:"pg", q:"Lembaga yang menangani pemberantasan tindak pidana korupsi di Indonesia adalah:", o:["KPK","BPK","KPU","DPR"], a:0 },
+  { tipe:"pg", q:"Penerapan nilai gotong royong dalam kehidupan masyarakat dapat dilakukan dengan:", o:["Bekerja sama membersihkan lingkungan","Membiarkan sampah menumpuk","Meminta bantuan tanpa partisipasi","Mengabaikan kerja bakti"], a:0 },
+  { tipe:"pg", q:"Prinsip keadilan dalam demokrasi berarti:", o:["Semua kebijakan harus menguntungkan pemerintah","Setiap warga negara mendapat perlakuan sama","Hanya kelompok tertentu yang mendapat hak istimewa","Pemerintah berkuasa mutlak"], a:1 },
+  { tipe:"pg", q:"Pilihan yang mencerminkan pengamalan Pancasila sila kedua adalah:", o:["Saling membantu teman yang mengalami kesulitan","Menyebar kebencian di media sosial","Menolak berdiskusi","Mengabaikan hak orang lain"], a:0 },
+  { tipe:"pg", q:"Salah satu bentuk pelaksanaan nilai demokrasi dalam sekolah adalah:", o:["Pemilihan ketua OSIS secara langsung","Penunjukan ketua kelas oleh guru","Pengambilan keputusan oleh satu orang","Tidak melibatkan siswa dalam musyawarah"], a:0 },
+  { tipe:"pg", q:"Pentingnya supremasi hukum adalah untuk:", o:["Melindungi hak warga negara","Memperkuat kekuasaan","Mengurangi partisipasi masyarakat","Mengabaikan keadilan"], a:0 },
+  { tipe:"pg", q:"Salah satu hambatan dalam penerapan otonomi daerah adalah:", o:["Ketimpangan sumber daya","Tingginya partisipasi masyarakat","Peningkatan infrastruktur","Pelayanan publik meningkat"], a:0 },
+  { tipe:"pg", q:"Implementasi nilai-nilai Pancasila dalam kehidupan sehari-hari dapat diwujudkan melalui:", o:["Perilaku intoleran","Saling menghargai perbedaan","Menolak keragaman budaya","Mengutamakan kepentingan pribadi"], a:1 }
+];
+
+// ================= SOAL URAIAN =================
+soalData.push(
+  { tipe:"uraian", q:"Jelaskan bagaimana prinsip musyawarah mufakat dapat diterapkan dalam menyelesaikan konflik di lingkungan sekolah!" },
+  { tipe:"uraian", q:"Analisislah dampak positif dan negatif globalisasi terhadap integrasi nasional Indonesia!" },
+  { tipe:"uraian", q:"Bagaimana upaya yang dapat dilakukan masyarakat untuk mencegah pelanggaran hak asasi manusia di lingkungan sekitar?" },
+  { tipe:"uraian", q:"Berikan contoh konkret penerapan nilai keadilan sosial dalam kehidupan sehari-hari dan jelaskan alasannya!" },
+  { tipe:"uraian", q:"Jelaskan pentingnya peran serta generasi muda dalam menjaga persatuan dan kesatuan bangsa di era digital!" }
+);
+
+
+// ================= STATE =================
+let index = 0;
+let jawaban = [];
+
+// ================= LOAD DATA (ANTI REFRESH) =================
+let simpanJawaban = localStorage.getItem("jawaban_pkn");
+let simpanIndex = localStorage.getItem("index_pkn");
+
+if(simpanJawaban){
+    jawaban = JSON.parse(simpanJawaban);
+}
+
+if(simpanIndex){
+    index = parseInt(simpanIndex);
+}
+
+// ================= TIMER =================
+let waktu = 90 * 60; // 90 menit
+let intervalTimer;
+
+function startTimer(){
+    intervalTimer = setInterval(() => {
+        let menit = Math.floor(waktu / 60);
+        let detik = waktu % 60;
+
+        document.getElementById("timer").innerText =
+            `${menit}:${detik < 10 ? "0"+detik : detik}`;
+
+        waktu--;
+
+        if(waktu < 0){
+            clearInterval(intervalTimer);
+            alert("Waktu habis!");
+            kirim();
+        }
+    }, 1000);
+}
+
+// ================= MULAI =================
+function mulai(){
+    let nama = document.getElementById("nama").value;
+
+    if(nama.trim()==""){
+        alert("Isi nama dulu!");
+        return;
+    }
+
+    document.getElementById("login").style.display="none";
+    document.getElementById("quiz").style.display="block";
+
+    startTimer();
+    tampil();
+}
+
+// ================= TAMPIL SOAL =================
+function tampil(){
+    let s = soalData[index];
+    let html = "";
+
+    if(s.bacaan){
+        html += `<p><i>${s.bacaan}</i></p>`;
+    }
+
+    html += `<p><b>${index+1}. ${s.t}</b></p>`;
+
+    if(s.tipe=="pg"){
+        s.o.forEach((opt,i)=>{
+            let checked = jawaban[index]==i ? "checked":"";
+            html += `<label>
+                <input type="radio" name="pilih" value="${i}" ${checked}>
+                ${opt}
+            </label><br>`;
+        });
+    }
+
+    if(s.tipe=="isian"){
+        let isi = jawaban[index] || "";
+        html += `<input type="text" id="isian" value="${isi}">`;
+    }
+
+    document.getElementById("soal").innerHTML = html;
+
+    // progress bar
+    let persen = (index/soalData.length)*100;
+    document.getElementById("bar").style.width = persen+"%";
+}
+
+// ================= NEXT =================
+function next(){
+    let s = soalData[index];
+
+    if(s.tipe=="pg"){
+        let pilih = document.querySelector('input[name="pilih"]:checked');
+        if(!pilih){ alert("Pilih jawaban!"); return; }
+        jawaban[index] = parseInt(pilih.value);
+    }
+
+    if(s.tipe=="isian"){
+        let isi = document.getElementById("isian").value;
+        if(isi.trim()==""){ alert("Isi jawaban!"); return; }
+        jawaban[index] = isi;
+    }
+
+    // simpan
+    localStorage.setItem("jawaban_pkn", JSON.stringify(jawaban));
+
+    index++;
+    localStorage.setItem("index_pkn", index);
+
+    if(index < soalData.length){
+        tampil();
+    } else {
+        kirim();
+    }
+}
+
+// ================= PREV =================
+function prev(){
+    if(index>0){
+        index--;
+        localStorage.setItem("index_pkn", index);
+        tampil();
+    }
+}
+
+// ================= KIRIM =================
+function kirim(){
+    let skor = 0;
+
+    soalData.forEach((s,i)=>{
+        if(s.tipe=="pg" && s.a === jawaban[i]){
+            skor++;
+        }
+    });
+
+    fetch("https://script.google.com/macros/s/AKfycbzm1SEbNBA9Q6j_-hqvHdWbMuoLxPhyrPlWRpzSZzkeicPflKSk46hqy96kr7GBg11j3A/exec", {
+        method:"POST",
+        body:JSON.stringify({
+            nama: document.getElementById("nama").value,
+            skor: skor,
+            jawaban: jawaban.join("|")
+        })
+    });
+
+    // hapus storage
+    localStorage.removeItem("jawaban_pkn");
+    localStorage.removeItem("index_pkn");
+
+    document.body.innerHTML =
+    "<h2 style='text-align:center;'>✅ Jawaban berhasil dikirim</h2>";
+}
+
+</script>
+</body>
+</html>
