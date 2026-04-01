@@ -428,72 +428,142 @@
     <button type="button" onclick="submitUjian()">Kirim Jawaban</button>
   </div>
 
-  <!-- Script -->
-  <script>
-    const kunciJawaban = {
-      bindo: {
-        isian: {
-          isian1:"baku",
-          isian2:"pelaksanaan",
-          isian3:"menjelaskan",
-          isian4:"ringkas",
-          isian5:"data"
-        },
-        pg: {
-          pg1:"C", pg2:"A", pg3:"B", pg4:"B", pg5:"A",
-          // lanjutkan sesuai kunci dokumen sampai pg45
-        }
-      }
-    };
+ <!-- Script Final -->
+<script>
+  const URL = "https://script.google.com/macros/s/AKfycbxBjFKsiEdBfoC-dQpptt2eePgUtCdyXnoqmRwYNgg1xRLMs4Td8vpFK8M2VhGv78ZITA/exec";
 
-    function mulaiUjian(){
-      const nama = document.getElementById("nama").value.trim();
-      if(nama===""){
-        alert("Silakan isi nama terlebih dahulu.");
-        return;
-      }
-      document.getElementById("intro").classList.add("hidden");
-      document.getElementById("sectionIsian").classList.remove("hidden");
-      document.getElementById("boxIsian").classList.add("active");
-      document.getElementById("infoBar").classList.remove("hidden");
-    }
-
-        function nextSection(current,next){
-      document.getElementById(current).classList.add("hidden");
-      document.getElementById(next).classList.remove("hidden");
-      if(next==="sectionPG"){
-        document.getElementById("boxPG").classList.add("active");
-        document.getElementById("boxIsian").classList.remove("active");
-      }
-      if(next==="sectionUraian"){
-        document.getElementById("boxUraian").classList.add("active");
-        document.getElementById("boxPG").classList.remove("active");
+  const kunciJawaban = {
+    bindo: {
+      isian: {
+        isian1:"baku",
+        isian2:"pelaksanaan",
+        isian3:"menjelaskan",
+        isian4:"ringkas",
+        isian5:"data"
+      },
+       pg: {
+      pg1:"C", pg2:"A", pg3:"B", pg4:"B", pg5:"A",
+      pg6:"C", pg7:"C", pg8:"B", pg9:"B", pg10:"B",
+      pg11:"A", pg12:"D", pg13:"A", pg14:"D", pg15:"C",
+      pg16:"B", pg17:"B", pg18:"B", pg19:"D", pg20:"B",
+      pg21:"B", pg22:"B", pg23:"B", pg24:"C", pg25:"A",
+      pg26:"C", pg27:"A", pg28:"B", pg29:"A", pg30:"B",
+      pg31:"C", pg32:"A", pg33:"A", pg34:"B", pg35:"C",
+      pg36:"C", pg37:"B", pg38:"A", pg39:"A", pg40:"B",
+      pg41:"B", pg42:"C", pg43:"B", pg44:"B", pg45:"B"
       }
     }
+  };
 
-    function submitUjian(){
-      const nama = document.getElementById("nama").value.trim();
-      const idMapel = "bindo";
-      const kunciIsian = kunciJawaban[idMapel].isian;
-      const kunciPG = kunciJawaban[idMapel].pg;
-
-      let skorIsian = 0;
-      for(let i=1;i<=5;i++){
-        const jawaban = document.getElementById("isian"+i).value.trim().toLowerCase();
-        if(jawaban === kunciIsian["isian"+i]) skorIsian++;
+  // Timer 90 menit
+  let waktu = 90 * 60; // detik
+  let timerInterval;
+  function mulaiTimer(){
+    timerInterval = setInterval(()=>{
+      waktu--;
+      const menit = Math.floor(waktu/60);
+      const detik = waktu % 60;
+      document.getElementById("timer").textContent = 
+        menit + " : " + (detik<10?"0":"") + detik;
+      if(waktu<=0){
+        clearInterval(timerInterval);
+        alert("Waktu habis! Jawaban otomatis dikirim.");
+        submitUjian();
       }
+    },1000);
+  }
 
-      let skorPG = 0;
-      for(let i=1;i<=45;i++){
-        const jawaban = document.querySelector('input[name="pg'+i+'"]:checked');
-        if(jawaban && jawaban.value === kunciPG["pg"+i]) skorPG++;
-      }
-
-      alert("Nama: "+nama+
-            "\nSkor Isian: "+skorIsian+" / 5"+
-            "\nSkor PG: "+skorPG+" / 45"+
-            "\nJawaban uraian tersimpan untuk penilaian manual.");
+  function mulaiUjian(){
+    const nama = document.getElementById("nama").value.trim();
+    if(nama===""){
+      alert("Silakan isi nama terlebih dahulu.");
+      return;
     }
-  </script>
+    document.getElementById("intro").classList.add("hidden");
+    document.getElementById("sectionIsian").classList.remove("hidden");
+    document.getElementById("boxIsian").classList.add("active");
+    document.getElementById("infoBar").classList.remove("hidden");
+    mulaiTimer(); // aktifkan timer saat ujian dimulai
+  }
+
+  function nextSection(current,next){
+    document.getElementById(current).classList.add("hidden");
+    document.getElementById(next).classList.remove("hidden");
+    if(next==="sectionPG"){
+      document.getElementById("boxPG").classList.add("active");
+      document.getElementById("boxIsian").classList.remove("active");
+    }
+    if(next==="sectionUraian"){
+      document.getElementById("boxUraian").classList.add("active");
+      document.getElementById("boxPG").classList.remove("active");
+    }
+  }
+
+  function submitUjian(){
+    clearInterval(timerInterval); // hentikan timer
+
+    const nama = document.getElementById("nama").value.trim();
+    const idMapel = "Bahasa Indonesia Paket C"; // nama mapel jelas
+    const kunciIsian = kunciJawaban["bindo"].isian;
+    const kunciPG = kunciJawaban["bindo"].pg;
+
+    // Hitung skor isian
+    let skorIsian = 0;
+    let isian = [];
+    for(let i=1;i<=5;i++){
+      const jawaban = document.getElementById("isian"+i).value.trim().toLowerCase();
+      isian.push(jawaban);
+      if(jawaban === kunciIsian["isian"+i]) skorIsian++;
+    }
+
+    // Hitung skor PG
+    let skorPG = 0;
+    let pg = [];
+    for(let i=1;i<=45;i++){
+      const jawaban = document.querySelector('input[name="pg'+i+'"]:checked');
+      const val = jawaban ? jawaban.value : "";
+      pg.push(val);
+      if(val === kunciPG["pg"+i]) skorPG++;
+    }
+
+    // Ambil uraian
+    let uraian = [];
+    for(let i=1;i<=5;i++){
+      uraian.push(document.getElementById("uraian"+i).value);
+    }
+
+    let nilai = ((skorIsian + skorPG) / 50) * 100;
+
+    // Kirim ke Google Sheet
+    fetch(URL, {
+      method: "POST",
+      body: JSON.stringify({
+        nama: nama,
+        mapel: idMapel,
+        isian: isian,
+        pg: pg,
+        uraian: uraian,
+        skorIsian: skorIsian,
+        skorPG: skorPG,
+        nilai: nilai
+      })
+    })
+    .then(res => res.text())
+    .then(res => {
+      alert(
+        "Jawaban berhasil dikirim!\n" +
+        "Nama: " + nama +
+        "\nMapel: " + idMapel +
+        "\nSkor Isian: " + skorIsian + " / 5" +
+        "\nSkor PG: " + skorPG + " / 45" +
+        "\nNilai: " + nilai.toFixed(2) +
+        "\nJawaban uraian tersimpan untuk penilaian manual."
+      );
+    })
+    .catch(err => {
+      alert("Gagal kirim ke server: " + err);
+    });
+  }
+</script>
 </body>
 </html>
