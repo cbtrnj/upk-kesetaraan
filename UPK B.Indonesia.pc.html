@@ -3,66 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CBT UPK FINAL FIX</title>
+<title>CBT Bahasa Indonesia</title>
 
 <style>
-body{margin:0;font-family:Arial;background:#f4f4f4}
+*{box-sizing:border-box;}
+html,body{margin:0;font-family:Arial;background:#f4f4f4;overflow-x:hidden;}
 
 .header{
 position:fixed;top:0;width:100%;
-background:#007bff;color:#fff;
-text-align:center;padding:10px;z-index:999
+background:#007bff;color:#fff;text-align:center;padding:10px;z-index:999;
 }
 
-.logo{width:60px}
+.logo{width:70px;display:block;margin:auto;}
+.timer{font-size:18px;font-weight:bold;margin-top:5px;}
 
-.container{
-max-width:900px;margin:auto;padding:10px;margin-top:200px
+.container{max-width:600px;margin:auto;padding:15px;margin-top:200px;}
+li{margin-bottom:55px;line-height:1.6;}
+
+.opsi{
+display:block;padding:12px;margin:8px 0;
+border:1px solid #ccc;border-radius:8px;background:#fff;cursor:pointer;
 }
+.opsi.selected{background:#28a745;color:#fff;border-color:#28a745;}
 
-@media(max-width:600px){
-.container{margin-top:230px}
+textarea,input{
+width:100%;padding:12px;margin-top:8px;font-size:15px;
 }
-
-.hidden{display:none}
-
-/* 🔧 Jarak antar soal */
-#pglist li {
-  margin-bottom: 24px;
-  line-height: 1.5;
-}
-
-/* 🔧 Tampilan opsi ala UTBK */
-.opsi {
-  display: inline-block;
-  padding: 10px 16px;
-  margin: 6px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background: #fff;
-  cursor: pointer;
-  font-size: 15px;
-  transition: all 0.2s ease;
-}
-
-/* 🔧 Saat dipilih */
-.opsi.selected {
-  background: #28a745;   /* hijau */
-  color: #fff;
-  border-color: #28a745;
-}
+textarea{min-height:150px;}
 
 button{
-width:100%;padding:12px;margin-top:10px;
-background:#007bff;color:#fff;border:none;border-radius:6px
+width:100%;padding:14px;margin-top:10px;
+background:#007bff;color:#fff;border:none;border-radius:8px;
 }
 
-input,textarea{width:100%;padding:10px;margin-top:5px}
-
-body{
-user-select:none;
--webkit-user-select:none;
-}
+.hidden{display:none;}
 </style>
 </head>
 
@@ -70,219 +44,319 @@ user-select:none;
 
 <div class="header">
 <img src="https://i.imgur.com/J1mKppg.png" class="logo">
-<h3>UJIAN PENDIDIKAN KESETARAAN (UPK)</h3>
-<p>PKBM Ristek Nusantara Jaya</p>
+<div>UJIAN PENDIDIKAN KESETARAAN (UPK)</div>
+<div>PKBM Ristek Nusantara Jaya</div>
+<dip>UPK Bahasa Indonesia</dip>
+<div id="timer">90:00</div>
 </div>
 
 <div class="container">
 
-<!-- LOGIN -->
-<div id="intro">
-<input type="text" id="nama" placeholder="Masukkan Nama Lengkap">
+<section id="identitasSection">
+<h3>Nama Peserta</h3>
+<input id="nama">
 <button onclick="mulai()">Mulai Ujian</button>
-</div>
+</section>
 
-<!-- ISIAN -->
-<div id="isian" class="hidden">
-<h3>Isian Singkat</h3>
-<ol>
-<li>Dalam menulis surat lamaran pekerjaan, penggunaan bahasa yang ______ sangat diperlukan agar surat terkesan profesional.<input id="is1"></li>
-<li>Kata “implementasi” dalam konteks pendidikan bermakna ______.<input id="is2"></li>
-<li>Teks eksplanasi bertujuan untuk ______ proses terjadinya suatu fenomena.<input id="is3"></li>
-<li>Sinonim dari kata “abstrak” adalah ______.<input id="is4"></li>
-<li>Paragraf argumentatif biasanya mengandung ______ yang mendukung pendapat penulis.<input id="is5"></li>
-</ol>
-<button onclick="kePG()">Lanjut ke PG</button>
-</div>
+<section id="isianSection" class="hidden">
+<h3>Isian</h3>
+<ul id="isianlist"></ul>
+<button onclick="next('pgSection')">Lanjut ke PG</button>
+</section>
 
-<!-- PG -->
-<div id="pg" class="hidden">
+<section id="pgSection" class="hidden">
 <h3>Pilihan Ganda</h3>
-<ol id="pglist"></ol>
-<button onclick="kembaliIsian()">⬅ Kembali</button>
-<button onclick="keUraian()">Lanjut ke Uraian</button>
-</div>
+<ul id="pglist"></ul>
+<button onclick="next('uraianSection')">Lanjut ke Uraian</button>
+<button onclick="next('isianSection')">⬅ Kembali</button>
+</section>
 
-<!-- URAIAN -->
-<div id="uraian" class="hidden">
+<section id="uraianSection" class="hidden">
 <h3>Uraian</h3>
-<ol>
-<li>Jelaskan perbedaan utama antara teks eksposisi dan teks argumentasi beserta contohnya masing-masing!<textarea id="u1"></textarea></li>
-<li>Berikan analisis tentang pentingnya penggunaan bahasa Indonesia yang baik dan benar di era digital saat ini!<textarea id="u2"></textarea></li>
-<li>Analisis fenomena siswa yang lebih suka menonton video pembelajaran dibanding membaca buku serta dampaknya!<textarea id="u3"></textarea></li>
-<li>Buat paragraf argumentatif tentang manfaat literasi digital!<textarea id="u4"></textarea></li>
-<li>Jelaskan langkah menulis teks pidato yang efektif!<textarea id="u5"></textarea></li>
-</ol>
-<button onclick="kembaliPG()">⬅ Kembali</button>
-<button onclick="kirim()">Kirim</button>
-</div>
+<ul id="uraianlist"></ul>
+<button onclick="next('pgSection')">⬅ Kembali</button>
+<button onclick="kirim()">Kirim Jawaban</button>
+</section>
 
 </div>
 
 <script>
+const MAPEL="BINDO";
+const URL="PASTE_LINK_GAS_KAMU";
+const KEY_DATA="UPK_"+MAPEL+"_DATA";
+const KEY_TIME="UPK_"+MAPEL+"_TIME";
 
-// ================= CONFIG =================
-const MAPEL = "BahasaIndonesia"; // beda mapel = ganti ini
-const URL = "https://script.google.com/macros/s/AKfycbzH9a-CMN3KBkbaNAI5At7zwe631DB348lbShyifZ0dmiMb3XT-d6eMapvxkWvuBhAJ/exec";
+let waktu=0,interval;
 
-// ================= STORAGE KEY =================
-function key(){
-let nama = localStorage.getItem("nama_siswa") || "anonim";
-return "cbt_"+MAPEL+"_"+nama;
-}
+/* ================= SOAL ================= */
 
-// ================= SOAL PG =================
-const soalPG = [ /* SEMUA SOAL KAMU (TIDAK DIUBAH) */ 
-["Pernyataan tentang teknologi digital termasuk paragraf...",["Narasi","Deskripsi","Argumentasi","Persuasi"]],
-["Ciri utama teks prosedur adalah...",["Menguraikan langkah-langkah secara berurutan","Mengandung unsur cerita dan tokoh","Menjelaskan peristiwa secara ilmiah","Membujuk pembaca"]],
-["Fungsi kalimat pembuka pidato adalah...",["Menyampaikan tujuan pidato","Mengucapkan salam dan sapaan","Memberikan argumen","Menyimpulkan isi pidato"]],
-["Makna implisit kalimat kebersihan sekolah...",["Siswa tidak peduli kebersihan","Kebersihan sekolah tergantung perilaku siswa","Tempat sampah tidak cukup","Sekolah tidak butuh tempat sampah"]],
-["Makna kata transparan adalah...",["Jelas dan terbuka","Tertutup rapat","Berbelit-belit","Sulit dimengerti"]],
-["Kata berhasil termasuk...",["Kata benda","Kata sifat","Kata kerja","Kata keterangan"]],
-["Ide pokok kendaraan listrik...",["Polusi udara meningkat","Menambah polusi","Mengurangi polusi udara","Tidak ramah lingkungan"]],
-["Dalam debat harus disertai...",["Emosi tinggi","Bukti dan alasan logis","Nada suara keras","Kata kasar"]],
-["Kalimat efektif adalah...",["Karena hujan deras sehingga banjir","Banjir melanda kota karena hujan deras","Banjir karena hujan deras melanda kota","Karena banjir hujan deras melanda"]],
-["Sinonim konklusi adalah...",["Penjelasan","Kesimpulan","Perbandingan","Penyangkalan"]],
-["Konflik cerpen berfungsi...",["Membuat cerita menarik","Mengulang kejadian","Menjelaskan latar","Menambah tokoh"]],
-["Keterangan cara adalah...",["Dia","Membaca","Buku","Sungguh-sungguh"]],
-["Teks negosiasi berisi...",["Penyelesaian masalah bersama","Perdebatan","Perasaan","Penjelasan ilmiah"]],
-["Makna kata harus...",["Anjuran","Larangan","Keinginan","Kewajiban"]],
-["Paragraf deduktif adalah...",["Ide di akhir","Tersebar","Ide di awal","Tidak ada ide"]],
-["Kata baku analisa...",["Analisa","Analisis","Menganalisa","Analisisan"]],
-["Teks eksposisi bertujuan...",["Mempengaruhi","Menjelaskan informasi","Menghibur","Cerita"]],
-["Majas personifikasi...",["Matahari terbenam","Angin berbisik lembut","Air mengalir","Langit biru"]],
-["Surat dinas wajib ada...",["Salam penutup","Nama penerima","Alamat pengirim","Tanda tangan"]],
-["Literasi digital berarti...",["Membaca buku","Menggunakan teknologi","Menulis tangan","Membaca novel"]],
-["Sudut pandang orang ketiga...",["Penulis tokoh","Narator tahu segalanya","Sudut aku","Tokoh sendiri"]],
-["Kalimat pasif adalah...",["Siswa membaca buku","Buku dibaca siswa","Guru menjelaskan","Teman bermain"]],
-["Makna menimbulkan...",["Mengurangi","Membuat muncul","Menghilangkan","Mengolah"]],
-["Pernyataan umum LHO...",["Ciri khusus","Proses","Penjelasan umum","Eksperimen"]],
-["Klausa sebab adalah...",["Karena tidak belajar","Hasil ujian","Karena hasil","Rina kurang"]],
-["Makna implementasi...",["Penolakan","Penundaan","Pelaksanaan","Penyempurnaan"]],
-["Hubungan kalimat membaca...",["Sebab-akibat","Perbandingan","Pertentangan","Penegasan"]],
-["Data ilmiah berfungsi...",["Menghibur","Memperkuat penjelasan","Mengulang","Menambah"]],
-["Sinonim urgensi...",["Kepentingan","Keraguan","Kebaikan","Keuntungan"]],
-["Hubungan kalimat rajin tetapi...",["Sebab-akibat","Pertentangan","Penegasan","Perbandingan"]],
-["Makna kreatif...",["Mengikuti","Meniru","Membuat baru","Mengulang"]],
-["Simpulan laporan...",["Merangkum","Memperpanjang","Memperkenalkan","Menambah"]],
-["Ide utama banjir...",["Drainase buruk","Kota banjir","Banjir disebabkan","Drainase baik"]],
-["Kata baku praktek...",["Praktek","Praktik","Praktekan","Praktikan"]],
-["Kata selesai adalah...",["Benda","Kerja","Sifat","Bilangan"]],
-["Moderator bertugas...",["Kesimpulan","Pendapat","Mengatur diskusi","Menulis"]],
-["Makna konotatif...",["Ayah bekerja","Hatiku berbunga","Ibu memasak","Kakak membaca"]],
-["Teks persuasi bertujuan...",["Meyakinkan","Menjelaskan","Menghibur","Data"]],
-["Ide pokok pendidikan karakter...",["Pendidikan penting","Generasi","Membentuk bangsa","Integritas"]],
-["Makna efektif...",["Cepat","Optimal","Banyak","Sulit"]],
-["Makna berpartisipasi...",["Menonton","Ikut serta","Menyusun","Mengawasi"]],
-["Penilaian film disebut...",["Orientasi","Tafsiran","Evaluasi","Koda"]],
-["Makna mencerminkan...",["Menyembunyikan","Menunjukkan","Menghilangkan","Menutupi"]],
-["Makna hoaks...",["Benar","Palsu","Lengkap","Resmi"]],
-["Bagian masalah diskusi...",["Argumen","Isu","Kesimpulan","Saran"]]
+let soalIsian=[
+"Dalam menulis surat lamaran pekerjaan, penggunaan bahasa yang _____________ sangat diperlukan agar surat terkesan profesional.",
+"Kata “implementasi” dalam konteks pendidikan bermakna _____________.",
+"Teks eksplanasi bertujuan untuk _____________ proses terjadinya suatu fenomena.",
+"Sinonim dari kata “abstrak” adalah _____________.",
+"Paragraf argumentatif biasanya mengandung _____________ yang mendukung pendapat penulis."
 ];
 
-// render
-const pglist=document.getElementById("pglist");
+let soalPG=[
+["Pernyataan di atas termasuk jenis paragraf...",["Narasi","Deskripsi","Argumentasi","Persuasi"]],
+["Berikut ini yang merupakan ciri utama teks prosedur adalah...",["Menguraikan langkah-langkah secara berurutan","Mengandung unsur cerita dan tokoh","Menjelaskan peristiwa secara ilmiah","Membujuk pembaca agar melakukan sesuatu"]],
+["Dalam teks pidato, fungsi kalimat pembuka adalah...",["Menyampaikan tujuan pidato","Mengucapkan salam dan sapaan","Memberikan argumen","Menyimpulkan isi pidato"]],
+["Makna implisit kalimat tersebut adalah...",["Siswa tidak peduli kebersihan","Kebersihan sekolah tergantung perilaku siswa","Tempat sampah tidak cukup","Sekolah tidak butuh tempat sampah"]],
+["Kata transparan berarti...",["Jelas dan terbuka","Tertutup rapat","Berbelit-belit","Sulit dimengerti"]],
+["Kata berhasil berfungsi sebagai...",["Kata benda","Kata sifat","Kata kerja","Kata keterangan"]],
+["Ide pokok paragraf tersebut adalah...",["Polusi meningkat","Kendaraan listrik menambah polusi","Penggunaan kendaraan listrik dapat mengurangi polusi udara","Tidak ramah lingkungan"]],
+["Dalam debat harus disertai...",["Emosi tinggi","Bukti dan alasan logis","Nada keras","Kata kasar"]],
+["Kalimat efektif adalah...",["Karena hujan deras, sehingga banjir","Banjir melanda kota karena hujan deras","Banjir karena hujan deras melanda kota","Karena banjir hujan deras"]],
+["Sinonim konklusi adalah...",["Penjelasan","Kesimpulan","Perbandingan","Penyangkalan"]],
+["Konflik cerpen berfungsi...",["Menarik","Mengulang","Latar","Tokoh"]],
+["Keterangan cara adalah...",["Dia","Membaca","Buku","Sungguh-sungguh"]],
+["Teks negosiasi berisi...",["Penyelesaian masalah","Perdebatan","Perasaan","Ilmiah"]],
+["Makna harus adalah...",["Anjuran","Larangan","Keinginan","Kewajiban"]],
+["Paragraf deduktif...",["Akhir","Sebar","Awal","Tidak ada"]],
+["Kata baku analisa...",["Analisa","Analisis","Menganalisa","Analisisan"]],
+["Teks eksposisi bertujuan...",["Mempengaruhi","Menjelaskan","Menghibur","Cerita"]],
+["Personifikasi...",["Matahari terbenam","Angin berbisik lembut","Air mengalir","Langit biru"]],
+["Surat dinas...",["Salam penutup","Nama penerima","Alamat pengirim","Tanda tangan"]],
+["Literasi digital...",["Membaca buku","Menggunakan teknologi","Menulis tangan","Membaca novel"]],
+["Sudut pandang...",["Tokoh utama","Narator tahu semua","Sudut aku","Tokoh sendiri"]],
+["Kalimat pasif...",["Siswa membaca","Buku dibaca siswa","Guru menjelaskan","Teman bermain"]],
+["Menimbulkan berarti...",["Mengurangi","Membuat muncul","Menghilangkan","Mengolah"]],
+["Observasi...",["Ciri objek","Proses","Penjelasan umum","Eksperimen"]],
+["Klausa sebab...",["Karena tidak belajar","Hasil ujian","Karena hasil","Rina kurang"]],
+["Implementasi berarti...",["Penolakan","Penundaan","Pelaksanaan","Penyempurnaan"]],
+["Hubungan kalimat...",["Sebab akibat","Perbandingan","Pertentangan","Penegasan"]],
+["Data ilmiah...",["Menghibur","Memperkuat","Mengulang","Menambah"]],
+["Urgensi...",["Kepentingan","Keraguan","Kebaikan","Keuntungan"]],
+["Hubungan kalimat...",["Sebab","Pertentangan","Penegasan","Perbandingan"]],
+["Kreatif...",["Ikut","Meniru","Membuat baru","Mengulang"]],
+["Simpulan...",["Merangkum","Memperpanjang","Memperkenalkan","Menambah"]],
+["Ide utama...",["Drainase buruk","Kota banjir","Banjir sebab","Drainase baik"]],
+["Kata baku praktek...",["Praktek","Praktik","Praktekan","Praktikan"]],
+["Kata selesai...",["Benda","Kerja","Sifat","Bilangan"]],
+["Moderator...",["Kesimpulan","Pendapat","Mengatur","Menulis"]],
+["Konotatif...",["Ayah bekerja","Hatiku berbunga","Ibu memasak","Kakak membaca"]],
+["Persuasi...",["Meyakinkan","Menjelaskan","Menghibur","Data"]],
+["Ide pokok...",["Pendidikan penting","Generasi","Pendidikan membentuk","Integritas"]],
+["Efektif...",["Cepat","Optimal","Banyak","Sulit"]],
+["Berpartisipasi...",["Menonton","Ikut serta","Menyusun","Mengawasi"]],
+["Ulasan...",["Orientasi","Tafsiran","Evaluasi","Koda"]],
+["Mencerminkan...",["Menyembunyikan","Menunjukkan","Menghilangkan","Menutupi"]],
+["Hoaks...",["Benar","Palsu","Lengkap","Resmi"]],
+["Diskusi...",["Argumen","Isu","Kesimpulan","Saran"]]
+];
+
+let soalUraian=[
+"Jelaskan perbedaan utama antara teks eksposisi dan teks argumentasi beserta contohnya!",
+"Analisis pentingnya penggunaan bahasa Indonesia yang baik dan benar di era digital!",
+"Analisis fenomena siswa lebih suka video pembelajaran!",
+"Buat paragraf argumentatif tentang literasi digital!",
+"Jelaskan langkah-langkah membuat pidato efektif!"
+];
+
+/* ================= RENDER ================= */
+function render(){
+soalIsian.forEach((s,i)=>{
+isianlist.innerHTML+=`<li>${i+1}. ${s}<textarea id="isian${i}"></textarea></li>`;
+});
 soalPG.forEach((s,i)=>{
-let html=`<li>${s[0]}`;
+let html=`<li>${i+1}. ${s[0]}`;
 s[1].forEach((o,j)=>{
 let h=["A","B","C","D"][j];
-html+=`<label class="opsi"><input type="radio" name="q${i}" value="${h}"> ${h}. ${o}</span></label>`;
+html+=`<div class="opsi" data-name="q${i}" data-value="${h}">${h}. ${o}</div>`;
 });
 html+=`</li>`;
 pglist.innerHTML+=html;
 });
+soalUraian.forEach((s,i)=>{
+uraianlist.innerHTML+=`<li>${i+1}. ${s}<textarea id="uraian${i}"></textarea></li>`;
+});
+}
 
-// ================= START =================
+/* ================= VALIDASI ================= */
+function next(id){
+
+if(id==="pgSection"){
+for(let i=0;i<soalIsian.length;i++){
+let el=document.getElementById("isian"+i);
+if(!el.value.trim()){
+alert("Isi semua ISIAN!");
+el.scrollIntoView();
+return;
+}
+}
+}
+
+if(id==="uraianSection"){
+for(let i=0;i<soalPG.length;i++){
+if(!document.querySelector(`.opsi.selected[data-name="q${i}"]`)){
+alert("Jawab semua PG!");
+document.querySelector(`[data-name="q${i}"]`).scrollIntoView();
+return;
+}
+}
+}
+
+document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
+}
+
+/* ================= MULAI ================= */
 function mulai(){
-if(!nama.value) return alert("Isi nama dulu");
 
-localStorage.setItem("nama_siswa", nama.value);
-
-intro.classList.add("hidden");
-isian.classList.remove("hidden");
-
-loadData();
-}
-
-// ================= NAV =================
-function kePG(){isian.classList.add("hidden");pg.classList.remove("hidden")}
-function keUraian(){pg.classList.add("hidden");uraian.classList.remove("hidden")}
-function kembaliIsian(){pg.classList.add("hidden");isian.classList.remove("hidden")}
-function kembaliPG(){uraian.classList.add("hidden");pg.classList.remove("hidden")}
-
-// ================= AUTO SAVE =================
-function simpan(){
-let data={
-nama:nama.value,
-  matpel:MAPEL,
-isian:[is1.value,is2.value,is3.value,is4.value,is5.value],
-pg:[],
-uraian:[u1.value,u2.value,u3.value,u4.value,u5.value]
-};
-
-for(let i=0;i<45;i++){
-let p=document.querySelector('input[name=q'+i+']:checked');
-data.pg.push(p?p.value:"");
-}
-
-localStorage.setItem(key(),JSON.stringify(data));
-}
-
-document.addEventListener("input",simpan);
-document.addEventListener("change",simpan);
-
-// ================= LOAD =================
-function loadData(){
-let data=localStorage.getItem(key());
-if(!data) return;
-
-data=JSON.parse(data);
-
-nama.value=data.nama||"";
-
-for(let i=1;i<=5;i++) document.getElementById("is"+i).value=data.isian[i-1]||"";
-
-for(let i=0;i<45;i++){
-let v=data.pg[i];
-if(v){
-let r=document.querySelector(`input[name=q${i}][value=${v}]`);
-if(r) r.checked=true;
-}
-}
-
-for(let i=1;i<=5;i++) document.getElementById("u"+i).value=data.uraian[i-1]||"";
-}
-
-// ================= AUTO LOAD =================
-window.onload=loadData;
-
-// ================= KIRIM =================
-function kirim(){
-
-let data=JSON.parse(localStorage.getItem(key())||"{}");
-
-if(!data.nama) return alert("Nama kosong");
-
-if(data.isian.includes("") || data.pg.includes("") || data.uraian.includes("")){
-alert("Masih ada soal kosong!");
+if(!nama.value.trim()){
+alert("Nama wajib diisi!");
+nama.focus();
 return;
 }
 
-fetch(URL,{
-method:"POST",
-body:JSON.stringify(data)
-})
-.then(()=>alert("Jawaban berhasil dikirim"))
-.catch(()=>alert("Gagal kirim"));
+simpan();
 
-localStorage.removeItem(key());
+document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
+document.getElementById("isianSection").classList.remove("hidden");
+
+waktu=localStorage.getItem(KEY_TIME)||5400;
+
+interval=setInterval(()=>{
+waktu--;
+localStorage.setItem(KEY_TIME,waktu);
+
+let m=Math.floor(waktu/60),s=waktu%60;
+timer.innerHTML=(m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+
+if(waktu<=0){
+alert("Waktu habis");
+kirim();
+}
+},1000);
 }
 
-// ================= ANTI CURANG =================
-document.addEventListener("contextmenu",e=>e.preventDefault());
-document.addEventListener("copy",e=>e.preventDefault());
-document.addEventListener("selectstart",e=>e.preventDefault());
+/* ================= SIMPAN ================= */
+function simpan(){
+let data={nama:nama.value,isian:[],pg:[],uraian:[]};
 
+soalIsian.forEach((_,i)=>data.isian.push(document.getElementById("isian"+i).value));
+soalPG.forEach((_,i)=>{
+let p=document.querySelector(`.opsi.selected[data-name="q${i}"]`);
+data.pg.push(p?p.dataset.value:"");
+});
+soalUraian.forEach((_,i)=>data.uraian.push(document.getElementById("uraian"+i).value));
+
+localStorage.setItem(KEY_DATA,JSON.stringify(data));
+}
+
+document.addEventListener("input",simpan);
+
+document.addEventListener("click",e=>{
+if(e.target.classList.contains("opsi")){
+let name=e.target.dataset.name;
+document.querySelectorAll(`[data-name="${name}"]`).forEach(el=>el.classList.remove("selected"));
+e.target.classList.add("selected");
+simpan();
+}
+});
+
+/* ================= LOAD ================= */
+function loadData(){
+let data=JSON.parse(localStorage.getItem(KEY_DATA)||"{}");
+
+if(data.nama){
+nama.value=data.nama;
+nama.disabled=true;
+}
+
+if(data.isian){
+data.isian.forEach((v,i)=>{
+let el=document.getElementById("isian"+i);
+if(el) el.value=v;
+});
+}
+
+if(data.pg){
+data.pg.forEach((v,i)=>{
+if(v){
+let el=document.querySelector(`.opsi[data-name="q${i}"][data-value="${v}"]`);
+if(el) el.classList.add("selected");
+}
+});
+}
+
+if(data.uraian){
+data.uraian.forEach((v,i)=>{
+let el=document.getElementById("uraian"+i);
+if(el) el.value=v;
+});
+}
+}
+
+/* ================= KIRIM ================= */
+function kirim(){
+
+if(!nama.value.trim()){
+alert("Nama belum diisi!");
+return;
+}
+
+for(let i=0;i<soalUraian.length;i++){
+if(!document.getElementById("uraian"+i).value.trim()){
+alert("Isi semua URAIAN!");
+return;
+}
+}
+
+// 🔥 AMBIL DATA
+let data={
+nama:nama.value,
+mapel:MAPEL,
+isian:[],
+pg:[],
+uraian:[]
+};
+
+soalIsian.forEach((_,i)=>{
+data.isian.push(document.getElementById("isian"+i).value);
+});
+
+soalPG.forEach((_,i)=>{
+let p=document.querySelector(`.opsi.selected[data-name="q${i}"]`);
+data.pg.push(p?p.dataset.value:"");
+});
+
+soalUraian.forEach((_,i)=>{
+data.uraian.push(document.getElementById("uraian"+i).value);
+});
+
+// 🔥 KIRIM KE GAS
+fetch(URL,{ 
+  method:"POST",
+  body:JSON.stringify(data)
+})
+.then(r=>r.text())
+.then(t=>{
+alert("Server: "+t);
+
+localStorage.removeItem(KEY_DATA);
+localStorage.removeItem(KEY_TIME);
+})
+.catch(err=>{
+alert("Error: "+err);
+});
+}
+/* ================= INIT ================= */
+window.onload=function(){
+render();
+loadData();
+if(localStorage.getItem(KEY_DATA)){
+let data=JSON.parse(localStorage.getItem(KEY_DATA));
+if(data.nama){
+nama.value=data.nama;
+nama.disabled=true;
+
+// 🔥 UBAH TOMBOL
+document.querySelector("#identitasSection button").innerText="Lanjutkan Ujian";
+}
+}
+};
 </script>
 
 </body>
