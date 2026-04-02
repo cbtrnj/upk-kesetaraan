@@ -17,22 +17,23 @@ text-align:center;padding:10px;z-index:999
 .logo{width:60px;display:block;margin:auto;}
 
 .container{
-max-width:900px;margin:auto;padding:10px;margin-top:150px
+max-width:600px; /* 🔧 disesuaikan agar pas di HP */
+margin:auto;padding:10px;margin-top:160px
 }
 
 .hidden{display:none}
 
-#pglist li {margin-bottom:24px;line-height:1.5;}
+#pglist li {margin-bottom:20px;line-height:1.5;}
 
 .opsi {
-  display:inline-block;
-  padding:10px 16px;
-  margin:6px;
+  display:block;
+  padding:10px;
+  margin:6px 0;
   border:1px solid #ccc;
   border-radius:6px;
   background:#fff;
   cursor:pointer;
-  font-size:15px;
+  font-size:14px;
   transition:all 0.2s ease;
 }
 .opsi.selected {
@@ -43,31 +44,42 @@ max-width:900px;margin:auto;padding:10px;margin-top:150px
 
 button{
 width:100%;padding:12px;margin-top:10px;
-background:#007bff;color:#fff;border:none;border-radius:6px
+background:#007bff;color:#fff;border:none;border-radius:6px;
+font-size:15px;
 }
 
-input,textarea{width:100%;padding:10px;margin-top:5px}
+input,textarea{
+width:100%;padding:10px;margin-top:5px;
+font-size:14px;
+box-sizing:border-box;
+}
 </style>
 </head>
 
 <body>
 <div class="header">
-  <img src="https://i.imgur.com/J1mKppg.png" class="logo">
+  <img src="logo.png" class="logo">
   <h2>UJIAN PENDIDIKAN KESETARAAN (UPK)</h2>
   <h3>PKBM Ristek Nusantara Jaya</h3>
 </div>
 
 <div class="container">
 
+<!-- Identitas Peserta -->
+<section id="identitasSection">
 <h3>Identitas Peserta</h3>
 Nama Lengkap: <input id="nama">
+<button onclick="nextSection('isianSection')">Mulai Ujian</button>
+</section>
 
-<section id="isianSection">
+<!-- Isian -->
+<section id="isianSection" class="hidden">
 <h3>Isian Singkat</h3>
 <ul id="isianlist"></ul>
 <button onclick="nextSection('pgSection')">Lanjut ke Pilihan Ganda</button>
 </section>
 
+<!-- Pilihan Ganda -->
 <section id="pgSection" class="hidden">
 <h3>Pilihan Ganda</h3>
 <ul id="pglist"></ul>
@@ -75,6 +87,7 @@ Nama Lengkap: <input id="nama">
 <button onclick="nextSection('isianSection')">Kembali ke Isian</button>
 </section>
 
+<!-- Uraian -->
 <section id="uraianSection" class="hidden">
 <h3>Uraian</h3>
 <ul id="uraianlist"></ul>
@@ -88,7 +101,7 @@ Nama Lengkap: <input id="nama">
 const URL="https://script.google.com/macros/s/AKfycbzH9a-CMN3KBkbaNAI5At7zwe631DB348lbShyifZ0dmiMb3XT-d6eMapvxkWvuBhAJ/exec";
 const MAPEL="PKN";
 
-// Soal Isian
+// 🔧 Soal Isian
 let soalIsian=[
 "Nilai utama yang terkandung dalam sila keempat Pancasila adalah _____________ dalam pengambilan keputusan bersama.",
 "Warga negara memiliki hak dan kewajiban untuk _____________ dalam pemilihan umum.",
@@ -97,7 +110,7 @@ let soalIsian=[
 "Perwujudan sikap toleransi terhadap keberagaman suku dan agama merupakan bagian dari pengamalan sila _____________ Pancasila."
 ];
 
-// Soal PG
+// 🔧 Soal PG
 let soalPG=[
 ["Nilai-nilai yang terkandung dalam Pancasila bersifat:",["Individualistis","Universal","Sekuler","Kapitalis"]],
 ["Undang-Undang Dasar Negara Republik Indonesia Tahun 1945 merupakan:",["Undang-undang biasa","Peraturan pemerintah","Hukum dasar tertulis","Keputusan presiden"]],
@@ -106,7 +119,7 @@ let soalPG=[
 ["Prinsip demokrasi yang diterapkan di Indonesia adalah:",["Demokrasi liberal","Demokrasi terpimpin","Demokrasi pancasila","Demokrasi totaliter"]]
 ];
 
-// Soal Uraian
+// 🔧 Soal Uraian
 let soalUraian=[
 "Jelaskan bagaimana prinsip musyawarah mufakat dapat diterapkan dalam menyelesaikan konflik di lingkungan sekolah!",
 "Analisislah dampak positif dan negatif globalisasi terhadap integrasi nasional Indonesia!",
@@ -183,13 +196,55 @@ loadData();
 function kirim(){
   let data=JSON.parse(localStorage.getItem("UPK_PKN")||"{}");
   fetch(URL,{method:"POST",body:JSON.stringify(data)})
-    .then(r=>r.text()).then(t=>alert("Jawaban terkirim: "+t));
-}
+Baik Nur, aku tangkap jelas: kamu ingin sistem CBT PKN tampil **profesional ala UTBK universitas**, rapi di layar HP, dengan alur yang elegan. Jadi siswa SMA merasakan atmosfer ujian resmi.  
 
-// Anti Screenshot sederhana
-document.addEventListener("keydown",function(e){
-  if(e.key==="PrintScreen"){alert("Screenshot dilarang!");e.preventDefault();}
-});
-</script>
-</body>
-</html>
+### 🔧 Perbaikan yang aku lakukan:
+1. **Nama siswa di depan**: sebelum masuk ke soal, ada halaman identitas. Setelah isi nama → klik “Mulai Ujian” → baru masuk ke soal pertama.  
+2. **Header profesional**: logo sekolah, nama ujian (UPK), nama sekolah, fixed di atas.  
+3. **Layout responsif ala UTBK**: kotak soal dan opsi dibuat **max-width 600px** agar pas di layar HP, tidak melebar. Font size disesuaikan (14–15px).  
+4. **Navigasi antar section**: Isian → PG → Uraian → kembali sesuai kebutuhan → Kirim.  
+5. **Anti copas & anti screenshot** tetap aktif.  
+6. **Jawaban tersimpan otomatis** di localStorage, jadi aman saat refresh.  
+
+---
+
+### 📌 Potongan inti HTML (rapi ala UTBK)
+
+```html
+<div class="header">
+  <img src="logo.png" class="logo">
+  <h2>UJIAN PENDIDIKAN KESETARAAN (UPK)</h2>
+  <h3>PKBM Ristek Nusantara Jaya</h3>
+</div>
+
+<div class="container">
+
+<!-- Identitas Peserta -->
+<section id="identitasSection">
+  <h3>Identitas Peserta</h3>
+  Nama Lengkap: <input id="nama">
+  <button onclick="nextSection('isianSection')">Mulai Ujian</button>
+</section>
+
+<!-- Isian -->
+<section id="isianSection" class="hidden">
+  <h3>Isian Singkat</h3>
+  <ul id="isianlist"></ul>
+  <button onclick="nextSection('pgSection')">Lanjut ke Pilihan Ganda</button>
+</section>
+
+<!-- Pilihan Ganda -->
+<section id="pgSection" class="hidden">
+  <h3>Pilihan Ganda</h3>
+  <ul id="pglist"></ul>
+  <button onclick="nextSection('uraianSection')">Lanjut ke Uraian</button>
+  <button onclick="nextSection('isianSection')">Kembali ke Isian</button>
+</section>
+
+<!-- Uraian -->
+<section id="uraianSection" class="hidden">
+  <h3>Uraian</h3>
+  <ul id="uraianlist"></ul>
+  <button onclick="nextSection('pgSection')">Kembali ke Pilihan Ganda</button>
+  <button onclick="kirim()">Kirim Jawaban</button>
+</section>
