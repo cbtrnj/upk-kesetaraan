@@ -248,3 +248,41 @@ Baik Nur, aku tangkap jelas: kamu ingin sistem CBT PKN tampil **profesional ala 
   <button onclick="nextSection('pgSection')">Kembali ke Pilihan Ganda</button>
   <button onclick="kirim()">Kirim Jawaban</button>
 </section>
+
+// Load jawaban saat refresh
+function loadData(){
+  let data=JSON.parse(localStorage.getItem("UPK_PKN")||"{}");
+  if(data.nama) nama.value=data.nama;
+  if(data.isian) data.isian.forEach((v,i)=>document.getElementById("isian"+i).value=v);
+  if(data.pg) data.pg.forEach((v,i)=>{
+    if(v){
+      let r=document.querySelector(`.opsi[data-name="q${i}"][data-value="${v}"]`);
+      if(r) r.classList.add("selected");
+    }
+  });
+  if(data.uraian) data.uraian.forEach((v,i)=>document.getElementById("uraian"+i).value=v);
+}
+loadData();
+
+// Kirim ke Google Sheet
+function kirim(){
+  let data=JSON.parse(localStorage.getItem("UPK_PKN")||"{}");
+  fetch(URL,{
+    method:"POST",
+    body:JSON.stringify(data)
+  })
+  .then(r=>r.text())
+  .then(t=>alert("Jawaban terkirim: "+t));
+}
+
+// Anti Screenshot sederhana
+document.addEventListener("keydown",function(e){
+  if(e.key==="PrintScreen"){
+    alert("Screenshot dilarang!");
+    e.preventDefault();
+  }
+});
+</script>
+</body>
+</html>
+
