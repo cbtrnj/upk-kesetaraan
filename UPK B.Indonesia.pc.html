@@ -32,6 +32,28 @@ display:block;padding:10px;margin:5px 0;
 border:1px solid #ccc;border-radius:8px;background:#fff
 }
 
+/* Tambahkan jarak antar soal */
+#pglist li {
+  margin-bottom: 25px;   /* lebih longgar antar soal */
+  line-height: 1.6;      /* teks lebih lega */
+}
+
+/* Perbaiki tampilan opsi */
+.opsi {
+  display: flex;         /* sejajarkan radio dan teks */
+  align-items: center;
+  padding: 8px 12px;
+  margin: 6px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+}
+
+/* Radio button diberi jarak dari teks */
+.opsi input[type="radio"] {
+  margin-right: 10px;
+}
+  
 button{
 width:100%;padding:12px;margin-top:10px;
 background:#007bff;color:#fff;border:none;border-radius:6px
