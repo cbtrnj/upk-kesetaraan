@@ -3,38 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CBT UPK Bahasa Indonesia</title>
+<title>CBT UPK</title>
+
 <style>
 body{margin:0;font-family:Arial;background:#f4f4f4}
-.header{position:fixed;top:0;width:100%;background:#007bff;color:#fff;text-align:center;padding:10px;z-index:1000}
-.logo{width:50px;margin:auto;display:block}
-.subjudul{font-size:12px;margin:0}
-#timer{background:red;padding:6px;margin-top:5px}
-.content{position:fixed;top:170px;bottom:0;left:0;right:0;overflow-y:auto;padding:15px;max-width:800px;margin:auto}
+.header{position:fixed;top:0;width:100%;background:#007bff;color:#fff;text-align:center;padding:10px;z-index:999}
+.logo{width:50px}
+.content{position:fixed;top:170px;bottom:0;width:100%;overflow:auto;padding:10px;max-width:800px;margin:auto}
 .hidden{display:none}
-.opsi{display:flex;gap:10px;padding:10px;margin:6px 0;border:2px solid #ddd;border-radius:10px;cursor:pointer}
+.opsi{display:flex;gap:10px;padding:10px;margin:5px 0;border:2px solid #ddd;border-radius:10px}
 .opsi input{display:none}
-.huruf{background:#eee;padding:5px 10px;border-radius:6px;font-weight:bold}
+.huruf{background:#eee;padding:5px 10px;border-radius:5px}
 .opsi:has(input:checked){background:#e6f0ff;border-color:#007bff}
 .opsi input:checked + .huruf{background:#007bff;color:#fff}
-input,textarea{width:100%;padding:8px;margin-top:5px}
 button{width:100%;padding:10px;margin-top:10px;background:#007bff;color:#fff;border:none}
+input,textarea{width:100%;padding:8px}
 </style>
 </head>
+
 <body>
 
 <div class="header">
 <img src="https://i.imgur.com/J1mKppg.png" class="logo">
 <h3>UJIAN PENDIDIKAN KESETARAAN (UPK)</h3>
-<p class="subjudul">PKBM Ristek Nusantara Jaya</p>
-<div id="timer">90:00</div>
+<p>PKBM Ristek Nusantara Jaya</p>
 </div>
 
+<!-- LOGIN -->
 <div class="content" id="intro">
 <input type="text" id="nama" placeholder="Masukkan Nama">
-<button onclick="mulai()">Mulai Ujian</button>
+<button onclick="mulai()">Mulai</button>
 </div>
 
+<!-- ISIAN -->
 <div class="content hidden" id="isian">
 <h3>Isian Singkat</h3>
 <ol>
@@ -44,33 +45,58 @@ button{width:100%;padding:10px;margin-top:10px;background:#007bff;color:#fff;bor
 <li>Sinonim dari kata “abstrak” adalah ______.<input id="is4"></li>
 <li>Paragraf argumentatif biasanya mengandung ______ yang mendukung pendapat penulis.<input id="is5"></li>
 </ol>
-<button onclick="pindah('isian','pg')">Lanjut ke PG</button>
+<button onclick="pindah('isian','pg')">Lanjut</button>
 </div>
 
+<!-- PG -->
 <div class="content hidden" id="pg">
 <h3>Pilihan Ganda</h3>
 <ol id="pglist"></ol>
-<button onclick="pindah('pg','isian')">Kembali</button>
-<button onclick="pindah('pg','uraian')">Lanjut ke Uraian</button>
+<button onclick="pindah('pg','uraian')">Lanjut</button>
 </div>
 
+<!-- URAIAN -->
 <div class="content hidden" id="uraian">
 <h3>Uraian</h3>
 <ol>
-<li>Jelaskan perbedaan utama antara teks eksposisi dan teks argumentasi beserta contohnya masing-masing!<textarea></textarea></li>
-<li>Berikan analisis tentang pentingnya penggunaan bahasa Indonesia yang baik dan benar di era digital saat ini!<textarea></textarea></li>
-<li>Analisis fenomena siswa lebih suka menonton video pembelajaran dibanding membaca buku serta dampaknya!<textarea></textarea></li>
-<li>Buat paragraf argumentatif tentang manfaat literasi digital!<textarea></textarea></li>
-<li>Jelaskan langkah menulis teks pidato yang efektif!<textarea></textarea></li>
+<li>Jelaskan perbedaan teks eksposisi dan argumentasi!<textarea></textarea></li>
+<li>Analisis pentingnya bahasa Indonesia di era digital!<textarea></textarea></li>
+<li>Analisis kebiasaan belajar siswa modern!<textarea></textarea></li>
+<li>Buat paragraf argumentatif literasi digital!<textarea></textarea></li>
+<li>Langkah menulis pidato efektif!<textarea></textarea></li>
 </ol>
-<button onclick="pindah('uraian','pg')">Kembali</button>
 <button onclick="kirim()">Kirim</button>
 </div>
 
 <script>
-function mulai(){document.getElementById('intro').classList.add('hidden');document.getElementById('isian').classList.remove('hidden');}
-function pindah(a,b){document.getElementById(a).classList.add('hidden');document.getElementById(b).classList.remove('hidden');}
 
+// CONFIG
+const MAPEL="Bahasa Indonesia";
+const URL="https://script.google.com/macros/s/AKfycbzGNFy2wsgRlV3qCwZbprIq7H5tPXZF-w91jK4RsyzMtS41yOAIq6-EeYiNFxoNQSwi/exec";
+
+// ===== MULAI =====
+function mulai(){
+let nama=document.getElementById("nama").value;
+if(!nama){alert("Isi nama dulu");return;}
+
+localStorage.setItem("nama_siswa",nama);
+
+let el=document.documentElement;
+if(el.requestFullscreen) el.requestFullscreen();
+
+document.getElementById("intro").classList.add("hidden");
+document.getElementById("isian").classList.remove("hidden");
+
+loadData();
+}
+
+// NAVIGASI
+function pindah(a,b){
+document.getElementById(a).classList.add("hidden");
+document.getElementById(b).classList.remove("hidden");
+}
+
+// ===== SOAL =====
 const soalPG = [
 ["Pernyataan tentang teknologi digital termasuk paragraf...",["Narasi","Deskripsi","Argumentasi","Persuasi"]],
 ["Ciri utama teks prosedur adalah...",["Menguraikan langkah-langkah secara berurutan","Mengandung unsur cerita dan tokoh","Menjelaskan peristiwa secara ilmiah","Membujuk pembaca"]],
@@ -119,33 +145,113 @@ const soalPG = [
 ["Bagian masalah diskusi...",["Argumen","Isu","Kesimpulan","Saran"]]
 ];
 
-const kunciPG=["C","A","B","B","A","C","C","B","B","B","A","D","A","D","C","B","B","B","D","B","B","B","B","C","A","C","A","B","A","B","C","A","A","B","C","C","B","A","C","B","B","C","B","B","B"];
+// ===== KUNCI =====
+const kunciPG=[
+"C","A","B","B","A","C","C","B","B","B",
+"A","D","A","D","C","B","B","B","D","B",
+"B","B","B","C","A","C","A","B","A","B",
+"C","A","A","B","C","C","B","A","C","B",
+"B","C","B","B","B"
+];
 
-const pglist=document.getElementById('pglist');
+// RENDER
+const pglist=document.getElementById("pglist");
 soalPG.forEach((s,i)=>{
 let html=`<li><p>${i+1}. ${s[0]}</p>`;
 s[1].forEach((o,j)=>{
-let h=String.fromCharCode(65+j);
-html+=`<label class='opsi'><input type='radio' name='q${i}' value='${h}'><span class='huruf'>${h}</span><span>${o}</span></label>`;
+let h=["A","B","C","D"][j];
+html+=`<label class="opsi"><input type="radio" name="q${i}" value="${h}"><span class="huruf">${h}</span><span>${o}</span></label>`;
 });
 html+=`</li>`;
 pglist.innerHTML+=html;
 });
 
-let waktu=90*60;
-setInterval(()=>{
-waktu--;let m=Math.floor(waktu/60);let s=waktu%60;
-document.getElementById('timer').innerText=m+":"+(s<10?"0":"")+s;
-},1000);
-
-function kirim(){
-let benar=0;
-soalPG.forEach((s,i)=>{
-let p=document.querySelector(`input[name=q${i}]:checked`);
-if(p && p.value===kunciPG[i]) benar++;
-});
-alert("Nilai PG: "+benar+"/"+soalPG.length);
+// ===== AUTO SAVE =====
+function key(){
+let nama=localStorage.getItem("nama_siswa")||"umum";
+return "cbt_"+MAPEL+"_"+nama;
 }
+
+document.addEventListener("change",()=>{
+let data={isian:[],pg:[]};
+
+for(let i=1;i<=5;i++) data.isian.push(document.getElementById("is"+i).value);
+
+for(let i=0;i<45;i++){
+let p=document.querySelector('input[name=q'+i+']:checked');
+data.pg.push(p?p.value:"");
+}
+
+localStorage.setItem(key(),JSON.stringify(data));
+});
+
+// LOAD DATA
+function loadData(){
+let data=localStorage.getItem(key());
+if(!data) return;
+data=JSON.parse(data);
+
+for(let i=1;i<=5;i++){
+document.getElementById("is"+i).value=data.isian[i-1]||"";
+}
+
+for(let i=0;i<45;i++){
+let v=data.pg[i];
+if(v){
+let r=document.querySelector(`input[name=q${i}][value=${v}]`);
+if(r) r.checked=true;
+}
+}
+}
+
+// AUTO LOAD
+window.onload=function(){
+let nama=localStorage.getItem("nama_siswa");
+if(nama){
+document.getElementById("nama").value=nama;
+document.getElementById("intro").classList.add("hidden");
+document.getElementById("isian").classList.remove("hidden");
+loadData();
+}
+};
+
+// ===== KIRIM =====
+function kirim(){
+let nama=localStorage.getItem("nama_siswa");
+if(!nama){alert("Nama kosong");return;}
+
+let isian=[],pg=[],nilai=0;
+
+for(let i=1;i<=5;i++) isian.push(document.getElementById("is"+i).value);
+
+for(let i=0;i<45;i++){
+let p=document.querySelector('input[name=q'+i+']:checked');
+let j=p?p.value:"";
+pg.push(j);
+if(j===kunciPG[i]) nilai++;
+}
+
+let score=Math.round((nilai/45)*100);
+alert("Nilai kamu: "+score);
+
+fetch(URL,{
+method:"POST",
+body:JSON.stringify({nama,mapel:MAPEL,isian,pg,score})
+})
+.then(()=>{
+alert("Jawaban terkirim");
+localStorage.removeItem(key());
+})
+.catch(()=>alert("Gagal kirim"));
+}
+
+// ===== PROTEKSI =====
+document.addEventListener("contextmenu",e=>e.preventDefault());
+document.addEventListener("copy",e=>e.preventDefault());
+document.addEventListener("visibilitychange",()=>{
+if(document.hidden){alert("Jangan keluar dari ujian!");}
+});
+
 </script>
 
 </body>
