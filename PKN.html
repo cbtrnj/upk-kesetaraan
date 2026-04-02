@@ -396,8 +396,17 @@ alert("Error: "+err);
 window.onload=function(){
 render();
 loadData();
-if(localStorage.getItem(KEY_TIME)) mulai();
+if(localStorage.getItem(KEY_DATA)){
+let data=JSON.parse(localStorage.getItem(KEY_DATA));
+if(data.nama){
+nama.value=data.nama;
+nama.disabled=true;
+
+// 🔥 UBAH TOMBOL
+document.querySelector("#identitasSection button").innerText="Lanjutkan Ujian";
 }
+}
+};
 </script>
 
 </body>
