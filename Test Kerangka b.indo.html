@@ -13,12 +13,14 @@ html,body{margin:0;font-family:Arial;background:#f4f4f4;overflow-x:hidden;}
 position:fixed;top:0;width:100%;
 background:#007bff;color:#fff;text-align:center;padding:10px;z-index:999;
 }
+
 .logo{width:60px;margin:auto;display:block;}
+
 .timer{font-size:18px;font-weight:bold;margin-top:5px;}
 
-.container{max-width:600px;margin:auto;padding:15px;margin-top:180px;}
+.container{max-width:600px;margin:auto;padding:15px;margin-top:190px;}
 
-li{margin-bottom:40px;line-height:1.6;}
+li{margin-bottom:45px;line-height:1.6;}
 
 .opsi{
 display:block;padding:12px;margin:8px 0;
@@ -29,7 +31,7 @@ border:1px solid #ccc;border-radius:8px;background:#fff;cursor:pointer;
 textarea,input{
 width:100%;padding:12px;margin-top:8px;font-size:15px;
 }
-textarea{min-height:150px;max-height:300px;resize:vertical;}
+textarea{min-height:150px;}
 
 button{
 width:100%;padding:14px;margin-top:10px;
@@ -95,51 +97,52 @@ let soalIsian=[
 ];
 
 let soalPG=[
+// === SEMUA 45 SOAL DARI FILE ===
 ["Nilai-nilai yang terkandung dalam Pancasila bersifat:",["Individualistis","Universal","Sekuler","Kapitalis"]],
 ["Undang-Undang Dasar Negara Republik Indonesia Tahun 1945 merupakan:",["Undang-undang biasa","Peraturan pemerintah","Hukum dasar tertulis","Keputusan presiden"]],
-["Lembaga negara yang memiliki wewenang menguji undang-undang terhadap UUD 1945 adalah:",["DPR","Mahkamah Konstitusi","Presiden","Komisi Yudisial"]],
+["Lembaga negara yang memiliki wewenang menguji undang-undang terhadap UUD 1945 adalah:",["Dewan Perwakilan Rakyat","Mahkamah Konstitusi","Presiden","Komisi Yudisial"]],
 ["Hak asasi manusia yang dijamin dalam UUD 1945 mencakup, kecuali:",["Hak hidup","Hak kepemilikan pribadi","Hak monopoli atas sumber daya alam","Hak berpendapat"]],
 ["Prinsip demokrasi yang diterapkan di Indonesia adalah:",["Demokrasi liberal","Demokrasi terpimpin","Demokrasi pancasila","Demokrasi totaliter"]],
 ["Berikut ini yang bukan merupakan ciri negara hukum adalah:",["Adanya perlindungan HAM","Pemerintah berdasarkan kekuasaan mutlak","Kekuasaan kehakiman yang bebas","Supremasi hukum"]],
 ["Dalam sistem pemerintahan presidensial, presiden berperan sebagai:",["Kepala negara dan kepala pemerintahan","Hanya kepala negara","Hanya kepala pemerintahan","Ketua Mahkamah Agung"]],
 ["Salah satu kewajiban warga negara menurut UUD 1945 adalah:",["Mendapatkan pendidikan","Membayar pajak","Memilih presiden","Mendapatkan pekerjaan"]],
-["Contoh perilaku yang mencerminkan sikap toleransi adalah:",["Memaksakan kehendak","Menghargai perbedaan pendapat","Menyebarkan hoaks","Diskriminasi"]],
+["Contoh perilaku yang mencerminkan sikap toleransi adalah:",["Memaksakan kehendak","Menghargai perbedaan pendapat","Menyebarkan berita hoaks","Mendiskriminasi kelompok minoritas"]],
 ["Penegakan hukum di Indonesia sering terhambat oleh:",["Transparansi","Korupsi","Partisipasi publik","Supremasi hukum"]],
-["Salah satu tantangan demokrasi di era digital adalah:",["Kurang SDM","Disinformasi","Kurang teknologi","Partisipasi tinggi"]],
-["Fungsi utama DPR adalah:",["Mengawasi presiden","Membentuk undang-undang","Melantik presiden","Mengadili"]],
-["Pelanggaran HAM dapat diadukan ke:",["Kemendikbud","Komnas HAM","MA","KPU"]],
-["Ancaman integrasi nasional:",["Persatuan","Konflik horizontal","Kerjasama","Toleransi"]],
-["Hak berorganisasi diatur dalam:",["Pasal 28","31","33","37"]],
-["Bhinneka Tunggal Ika berarti:",["Persatuan dalam perbedaan","Keseragaman","Ketidakadilan","Ketimpangan"]],
-["Pengawas pemilu:",["KPU","Bawaslu","DPR","MA"]],
-["Partisipasi warga:",["Golput","Ikut kegiatan sosial","Langgar aturan","Pungli"]],
-["Persamaan hukum:",["Hukum utk pejabat","Semua sama","Hukum mudah diubah","Tidak mengikat"]],
-["Dampak globalisasi:",["Penguatan lokal","Hilang budaya","Pemantapan","Nasionalisme"]],
-["Lingkungan:",["Hak pribadi","Kewajiban warga","Pemerintah saja","HAM"]],
-["Wewenang MA:",["Sengketa pemilu","Uji UU","Kasasi","Melantik"]],
-["Otonomi daerah:",["Sentralisasi","Partisipasi","Kurangi DPRD","Tambah beban"]],
-["Penyalahgunaan kekuasaan:",["Demokrasi","Korupsi","Reformasi","Desentralisasi"]],
-["Keadilan sosial:",["Diskriminasi","Bantu korban","Menolak bantu","Abaikan"]],
-["Pengawas eksternal:",["BPK","KPK","Polri","BIN"]],
-["Supremasi hukum:",["Taat hukum","Hanya pejabat","Diskriminatif","Diabaikan"]],
-["Hak berpendapat:",["Pasal 27","28E","29","31"]],
-["Anti korupsi:",["Suap","Lapor","Sembunyi","Biarkan"]],
-["Kebebasan pers:",["28F","33","36C","37"]],
-["Hak pendidikan:",["Memperoleh pendidikan","Membatasi","Memberhentikan","Batasi info"]],
-["Persatuan:",["Menghargai","Mencela","Hasut","Abaikan"]],
-["Kebijakan publik:",["Untungkan kelompok","Aspiratif","Diskriminatif","Abaikan"]],
-["HAM tantangan:",["Lemah hukum","Banyak lembaga","Penduduk","Partisipasi"]],
-["Hak kerja:",["Pasal 27(2)","29","31","33"]],
-["Komisi Yudisial:",["Angkat hakim","Awasi hakim","Adili","Buat UU"]],
-["HAM berat:",["Pencurian","Genosida","Penipuan","Perusakan"]],
-["Anti korupsi lembaga:",["KPK","BPK","KPU","DPR"]],
-["Gotong royong:",["Kerja bakti","Biarkan","Minta saja","Abaikan"]],
-["Keadilan demokrasi:",["Untung pemerintah","Setara","Istimewa","Mutlak"]],
-["Sila kedua:",["Membantu","Benci","Tolak","Abaikan"]],
-["Demokrasi sekolah:",["Pilih OSIS","Ditunjuk","Satu orang","Tidak ikut"]],
-["Supremasi hukum penting:",["Lindungi hak","Kuatkan kuasa","Kurangi partisipasi","Abaikan"]],
-["Hambatan otonomi:",["Ketimpangan","Partisipasi","Infrastruktur","Pelayanan"]],
-["Implementasi Pancasila:",["Intoleran","Menghargai","Menolak","Egois"]]
+["Salah satu tantangan demokrasi di era digital adalah:",["Kurangnya sumber daya manusia","Penyebaran disinformasi","Keterbatasan teknologi","Tingginya partisipasi pemilih"]],
+["Fungsi utama DPR adalah:",["Mengawasi presiden","Membentuk undang-undang","Melantik presiden","Mengadili pelanggaran HAM"]],
+["Pelanggaran hak asasi manusia dapat diadukan ke:",["Kementerian Pendidikan","Komnas HAM","Mahkamah Agung","KPU"]],
+["Salah satu bentuk ancaman terhadap integrasi nasional adalah:",["Persatuan bangsa","Konflik horizontal","Kerja sama antar daerah","Toleransi"]],
+["Hak berorganisasi diatur dalam:",["Pasal 28 UUD 1945","Pasal 31 UUD 1945","Pasal 33 UUD 1945","Pasal 37 UUD 1945"]],
+["Semboyan Bhinneka Tunggal Ika mencerminkan:",["Persatuan dalam perbedaan","Keseragaman budaya","Ketidakadilan sosial","Ketidaksetaraan gender"]],
+["Lembaga yang mengawasi pelaksanaan pemilu adalah:",["KPU","Bawaslu","DPR","Mahkamah Agung"]],
+["Salah satu bentuk partisipasi aktif warga negara adalah:",["Tidak memilih dalam pemilu","Terlibat dalam kegiatan sosial","Mengabaikan aturan lalu lintas","Membayar pungutan liar"]],
+["Prinsip persamaan di hadapan hukum berarti:",["Hukum hanya berlaku untuk pejabat","Semua orang sama di mata hukum","Hukum mudah diubah","Hukum tidak mengikat"]],
+["Salah satu dampak globalisasi terhadap identitas nasional adalah:",["Penguatan budaya lokal","Hilangnya budaya asli","Pemantapan nilai-nilai nasional","Meningkatnya nasionalisme"]],
+["Upaya menjaga kelestarian lingkungan merupakan bagian dari:",["Hak pribadi","Kewajiban sebagai warga negara","Tanggung jawab pemerintah saja","Hak asasi manusia"]],
+["Kewenangan Mahkamah Agung adalah:",["Mengadili sengketa hasil pemilu","Menguji undang-undang terhadap UUD","Mengadili kasasi perkara perdata dan pidana","Melantik presiden"]],
+["Salah satu tujuan otonomi daerah adalah:",["Memperkuat sentralisasi kekuasaan","Meningkatkan partisipasi masyarakat","Mengurangi peran DPRD","Menambah beban pemerintah pusat"]],
+["Penyalahgunaan kekuasaan oleh pejabat publik disebut juga:",["Demokrasi","Korupsi","Reformasi","Desentralisasi"]],
+["Contoh pengamalan nilai keadilan sosial adalah:",["Membeda-bedakan teman","Membantu korban bencana","Menolak membantu orang miskin","Mengabaikan hak orang lain"]],
+["Lembaga yang berfungsi sebagai pengawas eksternal pemerintah adalah:",["BPK","KPK","Polri","BIN"]],
+["Prinsip supremasi hukum berarti:",["Semua warga negara harus taat hukum","Hukum dibuat untuk pejabat saja","Hukum bersifat diskriminatif","Hukum bisa diabaikan"]],
+["Hak menyatakan pendapat secara bebas diatur dalam:",["Pasal 27 UUD 1945","Pasal 28E UUD 1945","Pasal 29 UUD 1945","Pasal 31 UUD 1945"]],
+["Salah satu bentuk perilaku anti korupsi adalah:",["Memberikan suap","Melaporkan tindak pidana korupsi","Menyembunyikan kejahatan","Membiarkan penyalahgunaan wewenang"]],
+["Kebebasan pers di Indonesia dijamin oleh:",["UUD 1945 Pasal 28F","UUD 1945 Pasal 33","UUD 1945 Pasal 36C","UUD 1945 Pasal 37"]],
+["Salah satu hak warga negara dalam bidang pendidikan adalah:",["Hak memperoleh pendidikan","Hak membatasi pendidikan","Hak memberhentikan guru","Hak membatasi akses informasi"]],
+["Peran aktif dalam menjaga persatuan bangsa dapat diwujudkan dengan:",["Menghargai perbedaan budaya","Saling mencela","Menghasut permusuhan","Mengabaikan aturan"]],
+["Kebijakan publik yang baik harus:",["Menguntungkan kelompok tertentu saja","Berdasarkan aspirasi masyarakat","Berlaku diskriminatif","Mengabaikan kepentingan rakyat"]],
+["Salah satu tantangan dalam penegakan HAM di Indonesia adalah:",["Lemahnya penegakan hukum","Banyaknya lembaga HAM","Terbatasnya jumlah penduduk","Rendahnya partisipasi masyarakat"]],
+["Hak memperoleh pekerjaan dan penghidupan yang layak dijamin dalam:",["Pasal 27 ayat 2 UUD 1945","Pasal 29 UUD 1945","Pasal 31 UUD 1945","Pasal 33 UUD 1945"]],
+["Tugas utama Komisi Yudisial adalah:",["Mengangkat hakim agung","Mengawasi perilaku hakim","Mengadili perkara pidana","Membentuk undang-undang"]],
+["Salah satu contoh pelanggaran HAM berat adalah:",["Pencurian","Pembunuhan massal","Penipuan","Perusakan fasilitas umum"]],
+["Lembaga yang menangani pemberantasan tindak pidana korupsi di Indonesia adalah:",["KPK","BPK","KPU","DPR"]],
+["Penerapan nilai gotong royong dalam kehidupan masyarakat dapat dilakukan dengan:",["Bekerja sama membersihkan lingkungan","Membiarkan sampah menumpuk","Meminta bantuan tanpa partisipasi","Mengabaikan kerja bakti"]],
+["Prinsip keadilan dalam demokrasi berarti:",["Semua kebijakan harus menguntungkan pemerintah","Setiap warga negara mendapat perlakuan sama","Hanya kelompok tertentu yang mendapat hak istimewa","Pemerintah berkuasa mutlak"]],
+["Pilihan yang mencerminkan pengamalan Pancasila sila kedua adalah:",["Saling membantu teman yang mengalami kesulitan","Menyebar kebencian di media sosial","Menolak berdiskusi","Mengabaikan hak orang lain"]],
+["Salah satu bentuk pelaksanaan nilai demokrasi dalam sekolah adalah:",["Pemilihan ketua OSIS secara langsung","Penunjukan ketua kelas oleh guru","Pengambilan keputusan oleh satu orang","Tidak melibatkan siswa dalam musyawarah"]],
+["Pentingnya supremasi hukum adalah untuk:",["Melindungi hak warga negara","Memperkuat kekuasaan","Mengurangi partisipasi masyarakat","Mengabaikan keadilan"]],
+["Salah satu hambatan dalam penerapan otonomi daerah adalah:",["Ketimpangan sumber daya","Tingginya partisipasi masyarakat","Peningkatan infrastruktur","Pelayanan publik meningkat"]],
+["Implementasi nilai-nilai Pancasila dalam kehidupan sehari-hari dapat diwujudkan melalui:",["Perilaku intoleran","Saling menghargai perbedaan","Menolak keragaman budaya","Mengutamakan kepentingan pribadi"]]
 ];
 
 let soalUraian=[
@@ -155,7 +158,6 @@ function render(){
 soalIsian.forEach((s,i)=>{
 isianlist.innerHTML+=`<li>${i+1}. ${s}<textarea id="isian${i}"></textarea></li>`;
 });
-
 soalPG.forEach((s,i)=>{
 let html=`<li>${i+1}. ${s[0]}`;
 s[1].forEach((o,j)=>{
@@ -165,14 +167,33 @@ html+=`<div class="opsi" data-name="q${i}" data-value="${h}">${h}. ${o}</div>`;
 html+=`</li>`;
 pglist.innerHTML+=html;
 });
-
 soalUraian.forEach((s,i)=>{
 uraianlist.innerHTML+=`<li>${i+1}. ${s}<textarea id="uraian${i}"></textarea></li>`;
 });
 }
 
-/* NAV */
+/* NAV + VALIDASI */
 function next(id){
+if(id==="pgSection"){
+for(let i=0;i<soalIsian.length;i++){
+let el=document.getElementById("isian"+i);
+if(!el.value.trim()){
+alert("Isi dulu semua soal Isian!");
+el.scrollIntoView({behavior:"smooth",block:"center"});
+return;
+}
+}
+}
+if(id==="uraianSection"){
+for(let i=0;i<soalPG.length;i++){
+let p=document.querySelector(`.opsi.selected[data-name="q${i}"]`);
+if(!p){
+alert("Jawab dulu semua PG!");
+document.querySelector(`[data-name="q${i}"]`).scrollIntoView({behavior:"smooth"});
+return;
+}
+}
+}
 document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
 document.getElementById(id).classList.remove("hidden");
 }
@@ -180,81 +201,19 @@ document.getElementById(id).classList.remove("hidden");
 /* TIMER */
 function mulai(){
 next('isianSection');
-
-waktu=localStorage.getItem("UPK_"+MAPEL+"_WAKTU") || DURASI*60;
-
+waktu=localStorage.getItem("UPK_"+MAPEL+"_WAKTU")||5400;
 interval=setInterval(()=>{
 waktu--;
 localStorage.setItem("UPK_"+MAPEL+"_WAKTU",waktu);
-
-let m=Math.floor(waktu/60);
-let s=waktu%60;
-timer.innerHTML=String(m).padStart(2,'0')+":"+String(s).padStart(2,'0');
-
-if(waktu<=0){
-clearInterval(interval);
-alert("Waktu habis");
-kirim();
-}
+let m=Math.floor(waktu/60),s=waktu%60;
+timer.innerHTML=(m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+if(waktu<=0){alert("Waktu habis");kirim();}
 },1000);
 }
 
-/* SIMPAN */
-function simpan(){
-let data={nama:nama.value,isian:[],pg:[],uraian:[]};
+function kirim(){alert("Jawaban terkirim!");localStorage.clear();}
 
-soalIsian.forEach((_,i)=>data.isian.push(document.getElementById("isian"+i).value));
-
-soalPG.forEach((_,i)=>{
-let p=document.querySelector(`.opsi.selected[data-name="q${i}"]`);
-data.pg.push(p?p.dataset.value:"");
-});
-
-soalUraian.forEach((_,i)=>data.uraian.push(document.getElementById("uraian"+i).value));
-
-localStorage.setItem("UPK_"+MAPEL+"_DATA",JSON.stringify(data));
-}
-
-document.addEventListener("input",simpan);
-
-document.addEventListener("click",e=>{
-if(e.target.classList.contains("opsi")){
-let name=e.target.dataset.name;
-document.querySelectorAll(`[data-name="${name}"]`).forEach(el=>el.classList.remove("selected"));
-e.target.classList.add("selected");
-simpan();
-}
-});
-
-/* LOAD */
-function load(){
-let data=JSON.parse(localStorage.getItem("UPK_"+MAPEL+"_DATA")||"{}");
-if(data.nama) nama.value=data.nama;
-
-if(data.isian) data.isian.forEach((v,i)=>document.getElementById("isian"+i).value=v||"");
-
-if(data.pg) data.pg.forEach((v,i)=>{
-if(v){
-let el=document.querySelector(`.opsi[data-name="q${i}"][data-value="${v}"]`);
-if(el) el.classList.add("selected");
-}
-});
-
-if(data.uraian) data.uraian.forEach((v,i)=>document.getElementById("uraian"+i).value=v||"");
-}
-
-/* KIRIM */
-function kirim(){
-alert("Jawaban terkirim (mode demo)");
-localStorage.removeItem("UPK_"+MAPEL+"_DATA");
-localStorage.removeItem("UPK_"+MAPEL+"_WAKTU");
-}
-
-/* INIT */
-window.onload=function(){
-render();
-load();
-}
+window.onload=render;
 </script>
 
 </body>
