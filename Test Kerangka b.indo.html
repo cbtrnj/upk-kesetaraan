@@ -14,16 +14,16 @@ background:#007bff;color:#fff;
 text-align:center;padding:10px;z-index:999
 }
 
+.logo{width:60px;display:block;margin:auto;}
+
 .container{
-max-width:900px;margin:auto;padding:10px;margin-top:120px
+max-width:900px;margin:auto;padding:10px;margin-top:150px
 }
 
 .hidden{display:none}
 
-/* Jarak antar soal */
 #pglist li {margin-bottom:24px;line-height:1.5;}
 
-/* Tampilan opsi ala UTBK */
 .opsi {
   display:inline-block;
   padding:10px 16px;
@@ -51,26 +51,44 @@ input,textarea{width:100%;padding:10px;margin-top:5px}
 </head>
 
 <body>
-<div class="header"><h2>UJIAN PKN Paket C</h2></div>
+<div class="header">
+  <img src="logo.png" class="logo">
+  <h2>UJIAN PENDIDIKAN KESETARAAN (UPK)</h2>
+  <h3>PKBM Ristek Nusantara Jaya</h3>
+</div>
+
 <div class="container">
 
+<h3>Identitas Peserta</h3>
+Nama Lengkap: <input id="nama">
+
+<section id="isianSection">
 <h3>Isian Singkat</h3>
 <ul id="isianlist"></ul>
+<button onclick="nextSection('pgSection')">Lanjut ke Pilihan Ganda</button>
+</section>
 
+<section id="pgSection" class="hidden">
 <h3>Pilihan Ganda</h3>
 <ul id="pglist"></ul>
+<button onclick="nextSection('uraianSection')">Lanjut ke Uraian</button>
+<button onclick="nextSection('isianSection')">Kembali ke Isian</button>
+</section>
 
+<section id="uraianSection" class="hidden">
 <h3>Uraian</h3>
 <ul id="uraianlist"></ul>
-
+<button onclick="nextSection('pgSection')">Kembali ke Pilihan Ganda</button>
 <button onclick="kirim()">Kirim Jawaban</button>
+</section>
+
 </div>
 
 <script>
 const URL="https://script.google.com/macros/s/AKfycbzH9a-CMN3KBkbaNAI5At7zwe631DB348lbShyifZ0dmiMb3XT-d6eMapvxkWvuBhAJ/exec";
 const MAPEL="PKN";
 
-// 🔧 Soal Isian
+// Soal Isian
 let soalIsian=[
 "Nilai utama yang terkandung dalam sila keempat Pancasila adalah _____________ dalam pengambilan keputusan bersama.",
 "Warga negara memiliki hak dan kewajiban untuk _____________ dalam pemilihan umum.",
@@ -79,7 +97,7 @@ let soalIsian=[
 "Perwujudan sikap toleransi terhadap keberagaman suku dan agama merupakan bagian dari pengamalan sila _____________ Pancasila."
 ];
 
-// 🔧 Soal PG
+// Soal PG
 let soalPG=[
 ["Nilai-nilai yang terkandung dalam Pancasila bersifat:",["Individualistis","Universal","Sekuler","Kapitalis"]],
 ["Undang-Undang Dasar Negara Republik Indonesia Tahun 1945 merupakan:",["Undang-undang biasa","Peraturan pemerintah","Hukum dasar tertulis","Keputusan presiden"]],
@@ -88,7 +106,7 @@ let soalPG=[
 ["Prinsip demokrasi yang diterapkan di Indonesia adalah:",["Demokrasi liberal","Demokrasi terpimpin","Demokrasi pancasila","Demokrasi totaliter"]]
 ];
 
-// 🔧 Soal Uraian
+// Soal Uraian
 let soalUraian=[
 "Jelaskan bagaimana prinsip musyawarah mufakat dapat diterapkan dalam menyelesaikan konflik di lingkungan sekolah!",
 "Analisislah dampak positif dan negatif globalisasi terhadap integrasi nasional Indonesia!",
@@ -118,6 +136,12 @@ soalUraian.forEach((s,i)=>{
   uraianlist.innerHTML+=`<li>${i+1}. ${s}<br><textarea id="uraian${i}"></textarea></li>`;
 });
 
+// Navigasi antar section
+function nextSection(id){
+  document.querySelectorAll("section").forEach(sec=>sec.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+}
+
 // Event klik opsi PG
 document.addEventListener("click",function(e){
   if(e.target.classList.contains("opsi")){
@@ -130,7 +154,7 @@ document.addEventListener("click",function(e){
 
 // Simpan ke localStorage
 function simpan(){
-  let data={matpel:MAPEL,isian:[],pg:[],uraian:[]};
+  let data={nama:nama.value,matpel:MAPEL,isian:[],pg:[],uraian:[]};
   soalIsian.forEach((s,i)=>data.isian.push(document.getElementById("isian"+i).value));
   for(let i=0;i<soalPG.length;i++){
     let p=document.querySelector('.opsi.selected[data-name="q'+i+'"]');
@@ -143,6 +167,7 @@ function simpan(){
 // Load jawaban saat refresh
 function loadData(){
   let data=JSON.parse(localStorage.getItem("UPK_PKN")||"{}");
+  if(data.nama) nama.value=data.nama;
   if(data.isian) data.isian.forEach((v,i)=>document.getElementById("isian"+i).value=v);
   if(data.pg) data.pg.forEach((v,i)=>{
     if(v){
@@ -157,13 +182,11 @@ loadData();
 // Kirim ke Google Sheet
 function kirim(){
   let data=JSON.parse(localStorage.getItem("UPK_PKN")||"{}");
-  fetch(URL,{
-    method:"POST",
-    body:JSON.stringify(data)
-  }).then(r=>r.text()).then(t=>alert("Jawaban terkirim: "+t));
+  fetch(URL,{method:"POST",body:JSON.stringify(data)})
+    .then(r=>r.text()).then(t=>alert("Jawaban terkirim: "+t));
 }
 
-// 🔧 Anti Screenshot sederhana
+// Anti Screenshot sederhana
 document.addEventListener("keydown",function(e){
   if(e.key==="PrintScreen"){alert("Screenshot dilarang!");e.preventDefault();}
 });
