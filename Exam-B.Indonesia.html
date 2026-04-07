@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ANBK PRO FINAL</title>
+
+<style>
+*{box-sizing:border-box;}
+body{margin:0;font-family:sans-serif;background:#eef2f7;}
+
+.header{
+background:linear-gradient(90deg,#2563eb,#1e40af);
+color:#fff;text-align:center;padding:15px;font-weight:bold;
+}
+
+#timer{
+font-size:18px;margin-top:5px;
+background:rgba(255,255,255,0.2);
+display:inline-block;padding:5px 15px;border-radius:20px;
+}
+
+.timer-warning{background:#dc2626 !important;}
+
+.container{max-width:700px;margin:auto;padding:15px;}
+
+section{display:none;}
+section.active{display:block;}
+
+.card{
+background:#fff;padding:15px;border-radius:15px;
+box-shadow:0 4px 10px rgba(0,0,0,0.08);margin-bottom:15px;
+}
+
+textarea,input{
+width:100%;padding:14px;margin-top:10px;
+border-radius:12px;border:2px solid #e0e7ff;font-size:16px;
+}
+
+.opsi{
+padding:12px;margin:8px 0;border:2px solid #ddd;
+border-radius:10px;cursor:pointer;
+}
+.opsi.selected{background:#2563eb;color:#fff;}
+
+button{
+width:100%;padding:14px;margin-top:15px;
+background:linear-gradient(90deg,#2563eb,#1e40af);
+color:#fff;border:none;border-radius:12px;font-weight:bold;
+}
+
+.btn-row{display:flex;gap:10px;}
+.btn-row button{flex:1;}
+
+.nav-wrap{
+background:#fff;padding:10px;border-radius:12px;margin-bottom:15px;
+}
+
+.nav-grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(40px,1fr));
+gap:6px;
+}
+
+.nav-btn{
+height:40px;border:none;border-radius:10px;background:#e5e7eb;
+}
+.nav-btn.aktif{background:#2563eb;color:#fff;}
+.nav-btn.done{background:#16a34a;color:#fff;}
+.nav-btn.ragu{background:#f59e0b;color:#fff;}
+
+#notif{
+position:fixed;bottom:20px;left:50%;
+transform:translateX(-50%);
+background:#1e40af;color:#fff;padding:12px 20px;
+border-radius:10px;display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+UJIAN BAHASA INDONESIA
+<div id="timer">90:00</div>
+</div>
+
+<div id="notif"></div>
+
+<div class="container">
+
+<section id="login" class="active">
+<input id="nama" placeholder="Nama">
+<input id="token" placeholder="Token">
+<button onclick="mulai()">Masuk</button>
+</section>
+
+<section id="isian"></section>
+<section id="pg"></section>
+<section id="uraian"></section>
+
+</div>
+
+<script>
+
+/* CONFIG */
+const URL="https://script.google.com/macros/s/AKfycby3sM_xxbS5INg2HZQXUxn0GVnv7gGxgFBCenBbK2CQqSbe-AJNjPc-BynPzy60WxLR/exec";
+const TOKEN="123456";
+const KODE_GURU="GURU123";
+
+const KEY_DATA="DATA";
+const KEY_TIME="TIME";
+const KEY_PEL="PEL";
+
+/* SOAL */
+let soalIsian=[
+"Dalam menulis surat lamaran pekerjaan, penggunaan bahasa yang _____________ sangat diperlukan agar surat terkesan profesional.",
+"Kata 'implementasi' dalam konteks pendidikan bermakna _____________."
+];
+
+let soalPG=[
+["Teks eksplanasi bertujuan untuk...",["Menjelaskan","Menghibur","Membujuk","Mengarang"]],
+["Sinonim abstrak adalah...",["Nyata","Konkret","Tidak nyata","Jelas"]]
+];
+
+let soalUraian=[
+"Jelaskan teks eksposisi!",
+"Jelaskan pentingnya literasi!"
+];
+
+/* SYSTEM */
+let data=JSON.parse(localStorage.getItem(KEY_DATA))||{isian:[],pg:[],uraian:[]};
+let waktu=parseInt(localStorage.getItem(KEY_TIME))||5400;
+let pelanggaran=parseInt(localStorage.getItem(KEY_PEL))||0;
+
+let indexPG=0;
+let raguPG=JSON.parse(localStorage.getItem("RAGU"))||[];
+
+/* NOTIF */
+function notif(t){
+notifBox.innerText=t;
+notifBox.style.display="block";
+setTimeout(()=>notifBox.style.display="none",3000);
+}
+
+/* TIMER */
+setInterval(()=>{
+if(waktu<=0)return;
+waktu--;
+localStorage.setItem(KEY_TIME,waktu);
+
+let m=Math.floor(waktu/60);
+let s=waktu%60;
+timer.innerText=(m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+
+if(waktu<=300){
+timer.classList.add("timer-warning");
+}
+
+if(waktu<=0){
+notif("Waktu habis!");
+kirim();
+}
+},1000);
+
+/* LOGIN */
+function mulai(){
+if(pelanggaran>=3){
+let kode=prompt("Kode Guru:");
+if(kode!==KODE_GURU)return notif("Salah!");
+pelanggaran=0;
+localStorage.setItem(KEY_PEL,0);
+}
+
+if(!nama.value)return notif("Isi nama!");
+if(token.value!==TOKEN)return notif("Token salah!");
+
+login.classList.remove("active");
+renderIsian();
+}
+
+/* ISIAN */
+function renderIsian(){
+isian.classList.add("active");
+
+let html="<div class='card'><h3>Isian</h3>";
+soalIsian.forEach((s,i)=>{
+html+=`${i+1}. ${s}<textarea id="i${i}">${data.isian[i]||""}</textarea>`;
+});
+html+="<button onclick='kePG()'>Lanjut</button></div>";
+
+isian.innerHTML=html;
+}
+
+function kePG(){
+data.isian=soalIsian.map((_,i)=>i0(i));
+if(data.isian.includes(""))return notif("Isi semua!");
+save();
+isian.classList.remove("active");
+renderPG();
+}
+
+function i0(i){return document.getElementById("i"+i).value}
+
+/* PG */
+function renderPG(){
+pg.classList.add("active");
+
+let html="<div class='nav-wrap'><div class='nav-grid'>";
+soalPG.forEach((_,i)=>{
+let s=data.pg[i]?"done":"";
+let a=i==indexPG?"aktif":"";
+let r=raguPG[i]?"ragu":"";
+html+=`<button class="nav-btn ${s} ${a} ${r}" onclick="go(${i})">${i+1}</button>`;
+});
+html+="</div></div>";
+
+let s=soalPG[indexPG];
+
+html+=`<div class='card'><b>${indexPG+1}. ${s[0]}</b>`;
+s[1].forEach((o,j)=>{
+let val=["A","B","C","D"][j];
+let sel=data.pg[indexPG]==val?"selected":"";
+html+=`<div class="opsi ${sel}" onclick="pilih('${val}')">${val}. ${o}</div>`;
+});
+
+html+=`
+<div class="btn-row">
+<button onclick="prev()">←</button>
+<button onclick="ragu()">Ragu</button>
+<button onclick="next()">→</button>
+</div>
+</div>`;
+
+pg.innerHTML=html;
+}
+
+function go(i){indexPG=i;renderPG();}
+function pilih(v){data.pg[indexPG]=v;save();renderPG();}
+function prev(){if(indexPG>0){indexPG--;renderPG();}}
+function next(){
+if(!data.pg[indexPG])return notif("Pilih dulu!");
+if(indexPG<soalPG.length-1){indexPG++;renderPG();}
+else keUraian();
+}
+function ragu(){
+raguPG[indexPG]=!raguPG[indexPG];
+localStorage.setItem("RAGU",JSON.stringify(raguPG));
+renderPG();
+}
+
+/* URAIAN */
+function keUraian(){
+pg.classList.remove("active");
+renderUraian();
+}
+
+function renderUraian(){
+uraian.classList.add("active");
+
+let html="<div class='card'><h3>Uraian</h3>";
+soalUraian.forEach((s,i)=>{
+html+=`${i+1}. ${s}<textarea id="u${i}">${data.uraian[i]||""}</textarea>`;
+});
+html+="<button onclick='kirim()'>Kirim</button></div>";
+
+uraian.innerHTML=html;
+}
+
+/* KIRIM */
+function kirim(){
+data.uraian=soalUraian.map((_,i)=>u0(i));
+if(data.uraian.includes(""))return notif("Isi semua!");
+
+fetch(URL,{
+method:"POST",
+body:JSON.stringify({
+nama:nama.value,
+isian:data.isian.join("|"),
+pg:data.pg.join(","),
+uraian:data.uraian.join("|")
+})
+});
+
+localStorage.clear();
+notif("Terkirim!");
+}
+
+function u0(i){return document.getElementById("u"+i).value}
+function save(){localStorage.setItem(KEY_DATA,JSON.stringify(data));}
+
+/* ANTI KELUAR */
+document.addEventListener("visibilitychange",()=>{
+if(document.hidden){
+pelanggaran++;
+localStorage.setItem(KEY_PEL,pelanggaran);
+notif("Jangan keluar ("+pelanggaran+"/3)");
+
+if(pelanggaran>=3){
+notif("Dikeluarkan!");
+setTimeout(()=>location.reload(),1500);
+}
+}
+});
+
+</script>
+
+</body>
+</html>
